@@ -1,7 +1,10 @@
 import { en } from './en';
 import { zh } from './zh';
 import { es } from './es';
-import { Translation, Language } from './types';
+import { Translation, Language, SUPPORTED_LANGUAGES } from './types';
+
+// Re-export types
+export { Translation, Language, SUPPORTED_LANGUAGES } from './types';
 
 // Simplified translations for remaining languages (fr, ar, hi, bn, pt, ru, id)
 // In production, these should be professionally translated
