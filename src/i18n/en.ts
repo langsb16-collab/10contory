@@ -145,6 +145,19 @@ export const en: Translation = {
     takeMockExam: 'Take Mock Exam',
     viewResults: 'View Results'
   },
+  diagnostic: {
+    title: 'Placement Test',
+    clickToStart: 'Check Your Level – Click Now!',
+    subtitle: 'Measure your current level and receive a personalized learning plan',
+    testInfo: {
+      title: 'Test Information',
+      duration: 'Duration: About 20 minutes',
+      questions: 'Number of Questions: 30',
+      areas: 'Assessment Areas: Listening, Reading, Writing',
+      results: 'Results: Available immediately'
+    },
+    startButton: 'Start Test'
+  },
   common: {
     save: 'Save',
     cancel: 'Cancel',

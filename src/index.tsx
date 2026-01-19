@@ -479,26 +479,46 @@ app.get('/diagnostic', (c) => {
       </div>
     </nav>
     
+    <!-- Language Selector -->
+    <div class="lang-selector">
+      <select id="langSelect" class="lang-select">
+        <option value="ko">🇰🇷 한국어</option>
+        <option value="en">🌐 English</option>
+        <option value="zh">🌐 中文</option>
+        <option value="hi">🌐 हिन्दी</option>
+        <option value="es">🌐 Español</option>
+        <option value="fr">🌐 Français</option>
+        <option value="ar">🌐 العربية</option>
+        <option value="bn">🌐 বাংলা</option>
+        <option value="pt">🌐 Português</option>
+        <option value="ru">🌐 Русский</option>
+        <option value="id">🌐 Bahasa Indonesia</option>
+      </select>
+    </div>
+    
     <!-- Diagnostic Test -->
     <section class="hero-section">
       <div class="hero-content" style="max-width: 800px;">
-        <h1 class="hero-title" style="font-size: 2.5rem; margin-bottom: 2rem;">
+        <h1 class="hero-title" style="font-size: 2.5rem; margin-bottom: 1rem;" data-i18n="diagnostic.title">
           급수 진단 테스트
         </h1>
-        <p class="hero-subtitle" style="margin-bottom: 3rem;">
+        <p class="hero-subtitle" style="font-size: 1.2rem; margin-bottom: 2rem; color: var(--blood-red);" data-i18n="diagnostic.clickToStart">
+          급수 진단하기 - 클릭하세요!
+        </p>
+        <p class="hero-subtitle" style="margin-bottom: 3rem;" data-i18n="diagnostic.subtitle">
           현재 실력을 측정하고 맞춤 학습 계획을 받으세요
         </p>
         
         <div class="feature-card">
-          <h2 class="feature-title" style="margin-bottom: 2rem;">테스트 정보</h2>
+          <h2 class="feature-title" style="margin-bottom: 2rem;" data-i18n="diagnostic.testInfo.title">테스트 정보</h2>
           <div style="text-align: left; color: var(--hanji-white); line-height: 2;">
-            <p><i class="fas fa-clock mr-2" style="color: var(--antique-gold);"></i> 소요 시간: 약 20분</p>
-            <p><i class="fas fa-list mr-2" style="color: var(--antique-gold);"></i> 문항 수: 30문항</p>
-            <p><i class="fas fa-chart-bar mr-2" style="color: var(--antique-gold);"></i> 평가 영역: 듣기, 읽기, 쓰기</p>
-            <p><i class="fas fa-certificate mr-2" style="color: var(--antique-gold);"></i> 결과: 즉시 확인 가능</p>
+            <p><i class="fas fa-clock mr-2" style="color: var(--antique-gold);"></i> <span data-i18n="diagnostic.testInfo.duration">소요 시간: 약 20분</span></p>
+            <p><i class="fas fa-list mr-2" style="color: var(--antique-gold);"></i> <span data-i18n="diagnostic.testInfo.questions">문항 수: 30문항</span></p>
+            <p><i class="fas fa-chart-bar mr-2" style="color: var(--antique-gold);"></i> <span data-i18n="diagnostic.testInfo.areas">평가 영역: 듣기, 읽기, 쓰기</span></p>
+            <p><i class="fas fa-certificate mr-2" style="color: var(--antique-gold);"></i> <span data-i18n="diagnostic.testInfo.results">결과: 즉시 확인 가능</span></p>
           </div>
           
-          <button onclick="startDiagnostic()" class="seal-button ink-spread" style="width: 100%; margin-top: 2rem; font-size: 1.2rem;">
+          <button onclick="startDiagnostic()" class="seal-button ink-spread" style="width: 100%; margin-top: 2rem; font-size: 1.2rem;" data-i18n="diagnostic.startButton">
             진단 시작하기
           </button>
         </div>

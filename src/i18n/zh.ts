@@ -145,6 +145,19 @@ export const zh: Translation = {
     takeMockExam: '参加模拟考试',
     viewResults: '查看结果'
   },
+  diagnostic: {
+    title: '等级诊断测试',
+    clickToStart: '点击开始等级诊断！',
+    subtitle: '测试您当前的水平，并获得个性化学习计划',
+    testInfo: {
+      title: '测试信息',
+      duration: '测试时间：约20分钟',
+      questions: '题目数量：30题',
+      areas: '评估领域：听力、阅读、写作',
+      results: '结果：立即查看'
+    },
+    startButton: '开始测试'
+  },
   common: {
     save: '保存',
     cancel: '取消',

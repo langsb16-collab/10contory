@@ -1,5 +1,6 @@
-// 10 languages supported
+// 11 languages supported (Korean first)
 export const SUPPORTED_LANGUAGES = {
+  ko: '한국어',
   en: 'English',
   zh: '中文',
   hi: 'हिन्दी',
@@ -118,6 +119,20 @@ export interface Translation {
     startLearning: string;
     takeMockExam: string;
     viewResults: string;
+  };
+  // Diagnostic Test
+  diagnostic: {
+    title: string;
+    clickToStart: string;
+    subtitle: string;
+    testInfo: {
+      title: string;
+      duration: string;
+      questions: string;
+      areas: string;
+      results: string;
+    };
+    startButton: string;
   };
   // Common
   common: {
