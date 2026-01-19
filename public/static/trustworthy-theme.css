@@ -1,0 +1,504 @@
+/* =============================================================
+   TOPIK Pro - Trustworthy Korean Care Theme
+   Learn Korean. Heal in Korea.
+   ============================================================= */
+
+/* ==================== 컬러 시스템 ==================== */
+:root {
+  /* Primary Colors - 신뢰·전문성 */
+  --medical-blue: #2F6FDB;
+  --soft-mint: #4FD1C5;
+  
+  /* Secondary Colors - 배경·구획 */
+  --warm-beige: #F5F2EE;
+  --light-gray: #E5E7EB;
+  --deep-navy: #1E2A44;
+  
+  /* Accent Colors - CTA·강조 */
+  --calm-coral: #FF8A7A;
+  --gold-sand: #D6B98C;
+  
+  /* Neutral Colors */
+  --pure-white: #FFFFFF;
+  --text-primary: #1E2A44;
+  --text-secondary: #6B7280;
+  --border-light: #E5E7EB;
+}
+
+/* ==================== 기본 스타일 ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--pure-white);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ==================== 부드러운 배경 그라데이션 ==================== */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(79, 209, 197, 0.05) 0%, 
+    rgba(255, 255, 255, 1) 50%,
+    rgba(47, 111, 219, 0.05) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==================== 네비게이션 바 ==================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-light);
+  z-index: 1000;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.navbar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--medical-blue);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.logo::before {
+  content: '🏥';
+  font-size: 1.8rem;
+}
+
+.logo:hover {
+  color: var(--soft-mint);
+  transform: translateY(-2px);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--medical-blue);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--medical-blue);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* ==================== 히어로 섹션 ==================== */
+.hero-section {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  z-index: 10;
+}
+
+.hero-content {
+  max-width: 1000px;
+  z-index: 100;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 800;
+  color: var(--deep-navy);
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.hero-title .highlight {
+  color: var(--medical-blue);
+  position: relative;
+  display: inline-block;
+}
+
+.hero-title .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(90deg, var(--soft-mint) 0%, var(--medical-blue) 100%);
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--text-secondary);
+  margin-bottom: 3rem;
+  line-height: 1.8;
+  font-weight: 400;
+}
+
+.hero-cta {
+  display: inline-flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ==================== 버튼 스타일 ==================== */
+.btn {
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.btn-primary {
+  background: var(--medical-blue);
+  color: var(--pure-white);
+}
+
+.btn-primary:hover {
+  background: #2558B8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(47, 111, 219, 0.3);
+}
+
+.btn-secondary {
+  background: var(--calm-coral);
+  color: var(--pure-white);
+}
+
+.btn-secondary:hover {
+  background: #FF7563;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 138, 122, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--medical-blue);
+  border: 2px solid var(--medical-blue);
+}
+
+.btn-outline:hover {
+  background: var(--medical-blue);
+  color: var(--pure-white);
+}
+
+/* ==================== 섹션 공통 스타일 ==================== */
+.section {
+  padding: 6rem 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--deep-navy);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ==================== 카드 그리드 ==================== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  background: var(--pure-white);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-light);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.card-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--soft-mint) 0%, var(--medical-blue) 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--deep-navy);
+  margin-bottom: 1rem;
+}
+
+.card-description {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+/* ==================== 서비스 영역별 색상 ==================== */
+/* 교육 영역 - Mint + Beige */
+.section-education {
+  background: var(--warm-beige);
+}
+
+.section-education .card-icon {
+  background: linear-gradient(135deg, var(--soft-mint) 0%, #3BB8AD 100%);
+}
+
+.section-education .btn-primary {
+  background: var(--soft-mint);
+  color: var(--deep-navy);
+}
+
+.section-education .btn-primary:hover {
+  background: #3BB8AD;
+}
+
+/* 의료 영역 - Medical Blue + White */
+.section-medical {
+  background: var(--pure-white);
+}
+
+.section-medical .card-icon {
+  background: linear-gradient(135deg, var(--medical-blue) 0%, #1E50C0 100%);
+}
+
+/* 관광 영역 - Beige + Gold */
+.section-tourism {
+  background: linear-gradient(135deg, var(--warm-beige) 0%, rgba(214, 185, 140, 0.1) 100%);
+}
+
+.section-tourism .card-icon {
+  background: linear-gradient(135deg, var(--gold-sand) 0%, #C4A876 100%);
+}
+
+.section-tourism .card-title {
+  color: var(--deep-navy);
+}
+
+/* ==================== 언어 선택기 ==================== */
+.lang-selector {
+  position: fixed;
+  top: 5rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+.lang-select {
+  background: var(--pure-white);
+  border: 2px solid var(--border-light);
+  color: var(--text-primary);
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.lang-select:hover {
+  border-color: var(--medical-blue);
+  box-shadow: 0 4px 16px rgba(47, 111, 219, 0.2);
+}
+
+/* ==================== 반응형 디자인 (모바일 우선) ==================== */
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 1rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .hero-section {
+    padding: 6rem 1rem 3rem;
+    min-height: 80vh;
+  }
+
+  .section {
+    padding: 4rem 1rem;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ==================== 로딩 애니메이션 ==================== */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--pure-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--light-gray);
+  border-top-color: var(--medical-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==================== 스크롤바 커스터마이징 ==================== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--warm-beige);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--medical-blue);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--soft-mint);
+}
+
+/* ==================== 접근성 (WCAG 준수) ==================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* 포커스 스타일 */
+*:focus-visible {
+  outline: 3px solid var(--medical-blue);
+  outline-offset: 2px;
+}
+
+/* ==================== 프린트 스타일 ==================== */
+@media print {
+  .navbar,
+  .lang-selector,
+  .loading-overlay {
+    display: none;
+  }
+}

@@ -1,4 +1,4 @@
-/* ==================== 챗봇 스타일 (오렌지 테마) ==================== */
+/* ==================== 챗봇 스타일 (Medical Blue 테마) ==================== */
 .chatbot-container {
   position: fixed;
   bottom: 2rem;
@@ -8,15 +8,15 @@
   isolation: isolate;
 }
 
-/* 챗봇 버튼 (오렌지 배경) */
+/* 챗봇 버튼 (Medical Blue 배경) */
 .chatbot-button {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%);
+  background: linear-gradient(135deg, #2F6FDB 0%, #4FD1C5 100%);
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+  box-shadow: 0 4px 20px rgba(47, 111, 219, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +26,7 @@
 
 .chatbot-button:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 30px rgba(255, 107, 53, 0.6);
+  box-shadow: 0 6px 30px rgba(47, 111, 219, 0.5);
 }
 
 .chatbot-button::before {
@@ -39,7 +39,7 @@
   font-size: 24px;
 }
 
-/* 챗봇 창 (오렌지 헤더) */
+/* 챗봇 창 (Medical Blue 헤더) */
 .chatbot-window {
   position: absolute;
   bottom: 80px;
@@ -53,7 +53,7 @@
   display: none;
   flex-direction: column;
   z-index: 99999;
-  border: 2px solid rgba(255, 107, 53, 0.3);
+  border: 2px solid rgba(47, 111, 219, 0.2);
 }
 
 .chatbot-window.open {
@@ -72,15 +72,15 @@
   }
 }
 
-/* 헤더 (오렌지 그라데이션) */
+/* 헤더 (Medical Blue 그라데이션) */
 .chatbot-header {
-  background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%);
+  background: linear-gradient(135deg, #2F6FDB 0%, #4FD1C5 100%);
   color: #FFFFFF;
   padding: 1.2rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
+  box-shadow: 0 2px 10px rgba(47, 111, 219, 0.3);
   position: relative;
   z-index: 1;
 }
@@ -146,14 +146,14 @@
 }
 
 .category-tab:hover {
-  color: #FF6B35;
-  background: rgba(255, 107, 53, 0.05);
+  color: #2F6FDB;
+  background: rgba(47, 111, 219, 0.05);
 }
 
 .category-tab.active {
-  color: #FF6B35;
-  border-bottom-color: #FF6B35;
-  background: rgba(255, 107, 53, 0.1);
+  color: #2F6FDB;
+  border-bottom-color: #2F6FDB;
+  background: rgba(47, 111, 219, 0.1);
 }
 
 /* FAQ 리스트 */
@@ -174,7 +174,7 @@
 }
 
 .chatbot-content::-webkit-scrollbar-thumb {
-  background: #FF6B35;
+  background: #2F6FDB;
   border-radius: 3px;
 }
 
@@ -194,8 +194,8 @@
 }
 
 .faq-item:hover {
-  border-color: #FF6B35;
-  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.1);
+  border-color: #2F6FDB;
+  box-shadow: 0 2px 8px rgba(47, 111, 219, 0.15);
 }
 
 .faq-question {
@@ -216,8 +216,8 @@
 }
 
 .faq-question:hover {
-  background: rgba(255, 107, 53, 0.05);
-  color: #FF6B35;
+  background: rgba(47, 111, 219, 0.05);
+  color: #2F6FDB;
 }
 
 .faq-question::after {
@@ -231,7 +231,7 @@
 
 .faq-item.open .faq-question::after {
   transform: rotate(180deg);
-  color: #FF6B35;
+  color: #2F6FDB;
 }
 
 .faq-answer {
@@ -278,15 +278,15 @@
 }
 
 .page-button:hover:not(:disabled) {
-  background: #FF6B35;
+  background: #2F6FDB;
   color: #FFFFFF;
-  border-color: #FF6B35;
+  border-color: #2F6FDB;
 }
 
 .page-button.active {
-  background: #FF6B35;
+  background: #2F6FDB;
   color: #FFFFFF;
-  border-color: #FF6B35;
+  border-color: #2F6FDB;
 }
 
 .page-button:disabled {

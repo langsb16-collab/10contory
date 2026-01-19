@@ -26,7 +26,7 @@ function calculateTopikLevel(totalScore: number): number {
 }
 
 // HTML 템플릿 생성 함수
-function renderKingdomHTML(content: string, title: string = 'TOPIK Pro - 언어의 혈투') {
+function renderTrustworthyHTML(content: string, title: string = 'TOPIK Pro - Learn Korean. Heal in Korea.') {
   return `
 <!DOCTYPE html>
 <html lang="ko">
@@ -35,42 +35,35 @@ function renderKingdomHTML(content: string, title: string = 'TOPIK Pro - 언어�
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${title}</title>
     
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;700;900&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Trustworthy Korean Care - Learn Korean, Medical Tourism, and Traditional Healing in Korea">
+    <meta name="keywords" content="Korean learning, TOPIK, Medical tourism, Korean medicine, Healthcare">
+    
+    <!-- Pretendard Font -->
+    <style>
+      @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    </style>
     
     <!-- Icons -->
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
     
     <!-- Custom Styles -->
-    <link href="/static/kingdom-theme.css" rel="stylesheet">
+    <link href="/static/trustworthy-theme.css" rel="stylesheet">
     <link href="/static/chatbot.css" rel="stylesheet">
     
     <!-- Axios for API calls -->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
-    
-    <style>
-      @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-    </style>
 </head>
 <body>
     <!-- Loading Overlay -->
     <div class="loading-overlay">
-      <div class="ink-drops">
-        <div class="ink-drop"></div>
-        <div class="ink-drop"></div>
-        <div class="ink-drop"></div>
-      </div>
+      <div class="loading-spinner"></div>
     </div>
-    
-    <!-- 3D 훈민정음 배경 -->
-    <div class="hunminjeongeum-3d">ㄱ</div>
     
     ${content}
     
-    <!-- Kingdom Theme Script -->
-    <script src="/static/kingdom-theme.js"></script>
+    <!-- Theme Script -->
+    <script src="/static/trustworthy-theme.js"></script>
     <!-- Chatbot Script -->
     <script src="/static/chatbot.js"></script>
 </body>
@@ -140,35 +133,29 @@ app.get('/api/lessons', async (c) => {
 // Frontend Routes
 // ============================================
 
-// Home page - 킹덤 테마 (로그인 버튼 제거)
+// Home page - Trustworthy Korean Care 테마
 app.get('/', (c) => {
-  const html = renderKingdomHTML(`
+  const html = renderTrustworthyHTML(`
     <!-- Navigation -->
     <nav class="navbar">
       <div class="navbar-container">
-        <div class="logo">
-          <a href="/" style="color: inherit; text-decoration: none;">
-            <i class="fas fa-scroll mr-2"></i>
-            <span>언어의 혈투</span>
-          </a>
-        </div>
-        <ul class="nav-links desktop-nav">
-          <li><a href="/" data-i18n="nav.home">홈</a></li>
-          <li><a href="/courses" data-i18n="nav.courses">강의</a></li>
-          <li><a href="/universities" data-i18n="nav.universities">대학</a></li>
-          <li><a href="/companies" data-i18n="nav.companies">기업</a></li>
-          <li><a href="/medical" data-i18n="nav.medical">건강검진</a></li>
-          <li><a href="/diagnostic" class="seal-button" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">진단 테스트</a></li>
+        <a href="/" class="logo">
+          TOPIK Pro
+        </a>
+        <ul class="nav-links">
+          <li><a href="/" data-i18n="nav.home">Home</a></li>
+          <li><a href="/courses" data-i18n="nav.courses">Courses</a></li>
+          <li><a href="/universities" data-i18n="nav.universities">Universities</a></li>
+          <li><a href="/companies" data-i18n="nav.companies">Companies</a></li>
+          <li><a href="/medical" data-i18n="nav.medical">Medical</a></li>
+          <li><a href="/diagnostic" class="btn btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;">Diagnostic</a></li>
         </ul>
-        <button class="mobile-menu">
-          <i class="fas fa-bars" style="color: var(--antique-gold); font-size: 1.5rem;"></i>
-        </button>
       </div>
     </nav>
     
     <!-- Language Selector -->
     <div class="lang-selector">
-      <select id="langSelect" class="lang-select">
+      <select id="lang-select" class="lang-select">
         <option value="ko">🇰🇷 한국어</option>
         <option value="en">🌐 English</option>
         <option value="zh">🌐 中文</option>
@@ -187,167 +174,189 @@ app.get('/', (c) => {
     <section class="hero-section">
       <div class="hero-content">
         <h1 class="hero-title" data-i18n="home.hero.title">
-          언어는 생존이다.<br>가장 치열하게 배우고,<br>완벽하게 지배하라.
+          Learn <span class="highlight">Korean</span>. Heal in <span class="highlight">Korea</span>.
         </h1>
         <p class="hero-subtitle" data-i18n="home.hero.subtitle">
-          — 조선의 언어를 넘어, 세계의 지혜를 탐하라
+          Language, Health, and Care — All in One Journey
         </p>
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-          <a href="/dashboard" class="seal-button ink-spread" data-i18n="home.hero.cta">
-            학습 시작하기
+        <div class="hero-cta">
+          <a href="/dashboard" class="btn btn-primary" data-i18n="home.hero.cta">
+            <i class="fas fa-graduation-cap"></i> Start Learning
           </a>
-          <a href="/diagnostic" class="seal-button ink-spread" style="background: var(--antique-gold); color: var(--kingdom-black);">
-            급수 진단하기 <i class="fas fa-chart-line ml-2"></i>
+          <a href="/diagnostic" class="btn btn-secondary">
+            <i class="fas fa-chart-line"></i> Take Diagnostic Test
+          </a>
+          <a href="/medical" class="btn btn-outline">
+            <i class="fas fa-heartbeat"></i> Medical Tourism
           </a>
         </div>
       </div>
     </section>
     
-    <!-- Features Section -->
-    <section class="features-section">
-      <div class="features-container">
+    <!-- Education Section - Mint + Beige -->
+    <section class="section section-education">
+      <div class="container">
         <h2 class="section-title" data-i18n="home.features.title">
-          왜 우리는 언어를 정복해야 하는가?
+          Master Korean with TOPIK Pro
         </h2>
-        <div class="features-grid">
-          <!-- Feature 1 -->
-          <div class="feature-card ink-spread">
-            <div class="feature-icon">🖊️</div>
-            <h3 class="feature-title" data-i18n="home.features.feature1.title">
-              고대 지식의 열쇠
-            </h3>
-            <p class="feature-desc" data-i18n="home.features.feature1.desc">
-              AI 기반 개인화 학습으로 TOPIK 급수별 맞춤 커리큘럼 제공
-            </p>
-          </div>
-          
-          <!-- Feature 2 -->
-          <div class="feature-card ink-spread">
-            <div class="feature-icon">🏮</div>
-            <h3 class="feature-title" data-i18n="home.features.feature2.title">
-              미래를 향한 횃불
-            </h3>
-            <p class="feature-desc" data-i18n="home.features.feature2.desc">
-              경산 지역 대학·제조업체와 직접 연계, 정착형 인재로 성장
-            </p>
-          </div>
-          
-          <!-- Feature 3 -->
-          <div class="feature-card ink-spread">
-            <div class="feature-icon">⚔️</div>
-            <h3 class="feature-title" data-i18n="home.features.feature3.title">
-              세계를 지배할 힘
-            </h3>
-            <p class="feature-desc" data-i18n="home.features.feature3.desc">
-              11개 언어 지원, 영원히 무료 - 모두를 위한 한국어 교육
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Cultural Experience Section -->
-    <section class="features-section" style="background: linear-gradient(135deg, rgba(197, 160, 89, 0.1) 0%, rgba(13, 13, 13, 0.9) 100%);">
-      <div class="features-container">
-        <h2 class="section-title">
-          문화의 정복 - 한국을 체험하라
-        </h2>
-        <div class="features-grid">
-          <!-- Korean Cooking -->
-          <div class="feature-card ink-spread">
-            <div class="feature-icon">🍜</div>
-            <h3 class="feature-title">한국 요리</h3>
-            <p class="feature-desc">
-              5분 안에 완성하는 간단한 한국 음식 레시피로 언어와 문화를 동시에 학습
-            </p>
-            <a href="/culture/cooking" style="color: var(--blood-red); font-weight: 600; margin-top: 1rem; display: inline-block;">
-              요리 시작하기 →
-            </a>
-          </div>
-          
-          <!-- Taekwondo -->
-          <div class="feature-card ink-spread">
-            <div class="feature-icon">🥋</div>
-            <h3 class="feature-title">태권도 기초</h3>
-            <p class="feature-desc">
-              집에서 배우는 태권도 기본 동작과 한국어 명령어, 건강한 삶의 시작
-            </p>
-            <a href="/culture/taekwondo" style="color: var(--blood-red); font-weight: 600; margin-top: 1rem; display: inline-block;">
-              수련 시작하기 →
-            </a>
-          </div>
-          
-          <!-- Local Business -->
-          <div class="feature-card ink-spread">
-            <div class="feature-icon">🏪</div>
-            <h3 class="feature-title">지역 상권 탐험</h3>
-            <p class="feature-desc">
-              경산·경북 지역 맛집과 생활 서비스를 학습하며 실전 한국어 연습
-            </p>
-            <a href="/local-business" style="color: var(--blood-red); font-weight: 600; margin-top: 1rem; display: inline-block;">
-              탐험 시작하기 →
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Statistics Section -->
-    <section class="features-section" style="background: linear-gradient(135deg, rgba(139, 0, 0, 0.1) 0%, rgba(13, 13, 13, 0.8) 100%); padding: 6rem 2rem;">
-      <div class="features-container">
-        <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); text-align: center;">
-          <div>
-            <div class="counter" data-target="11" style="font-size: 4rem; font-weight: 900; color: var(--blood-red); font-family: 'Hahmlet', serif;">11</div>
-            <div style="color: var(--antique-gold); font-size: 1.2rem; margin-top: 1rem;">지원 언어</div>
-          </div>
-          <div>
-            <div class="counter" data-target="5" style="font-size: 4rem; font-weight: 900; color: var(--blood-red); font-family: 'Hahmlet', serif;">5</div>
-            <div style="color: var(--antique-gold); font-size: 1.2rem; margin-top: 1rem;">협력 대학</div>
-          </div>
-          <div>
-            <div class="counter" data-target="20" style="font-size: 4rem; font-weight: 900; color: var(--blood-red); font-family: 'Hahmlet', serif;">20+</div>
-            <div style="color: var(--antique-gold); font-size: 1.2rem; margin-top: 1rem;">제조업체 연계</div>
-          </div>
-          <div>
-            <div style="font-size: 4rem; font-weight: 900; color: var(--blood-red); font-family: 'Hahmlet', serif;">FREE</div>
-            <div style="color: var(--antique-gold); font-size: 1.2rem; margin-top: 1rem;">평생 무료</div>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <section class="hero-section" style="min-height: 60vh; background: linear-gradient(135deg, rgba(139, 0, 0, 0.3) 0%, rgba(197, 160, 89, 0.2) 100%);">
-      <div class="hero-content">
-        <h2 class="hero-title" style="font-size: clamp(1.5rem, 6vw, 3rem);">
-          정복의 시작은 지금이다
-        </h2>
-        <p class="hero-subtitle" style="font-size: clamp(1rem, 2.5vw, 1.5rem);">
-          회원가입 없이 즉시 시작 - 완전 무료 플랫폼
+        <p class="section-subtitle">
+          Structured learning paths designed for every level
         </p>
-        <a href="/dashboard" class="seal-button ink-spread">
-          바로 시작하기
-        </a>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-icon">📚</div>
+            <h3 class="card-title" data-i18n="home.features.feature1.title">AI-Powered Learning</h3>
+            <p class="card-description" data-i18n="home.features.feature1.desc">
+              Personalized study plans based on your level and goals
+            </p>
+            <a href="/courses" class="btn btn-primary" style="font-size: 0.9rem; padding: 0.7rem 1.5rem;">
+              Browse Courses
+            </a>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎓</div>
+            <h3 class="card-title" data-i18n="home.features.feature2.title">TOPIK Preparation</h3>
+            <p class="card-description" data-i18n="home.features.feature2.desc">
+              Complete preparation for all TOPIK levels with mock exams
+            </p>
+            <a href="/diagnostic" class="btn btn-primary" style="font-size: 0.9rem; padding: 0.7rem 1.5rem;">
+              Take Diagnostic
+            </a>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌏</div>
+            <h3 class="card-title" data-i18n="home.features.feature3.title">11 Languages Supported</h3>
+            <p class="card-description" data-i18n="home.features.feature3.desc">
+              Learn in your native language - completely free
+            </p>
+            <a href="/" class="btn btn-primary" style="font-size: 0.9rem; padding: 0.7rem 1.5rem;">
+              Get Started
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Medical Tourism Section - Medical Blue + White -->
+    <section class="section section-medical">
+      <div class="container">
+        <h2 class="section-title" data-i18n="medical.hero.title">
+          K-Medical Health Tour
+        </h2>
+        <p class="section-subtitle" data-i18n="medical.hero.subtitle">
+          Experience 1-3 day health checkup and traditional Korean medicine healing
+        </p>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-icon">🏥</div>
+            <h3 class="card-title">Comprehensive Checkup</h3>
+            <p class="card-description">
+              From basic to VIP packages - Professional medical services at affordable prices
+            </p>
+            <a href="/medical" class="btn btn-primary" style="font-size: 0.9rem; padding: 0.7rem 1.5rem;">
+              View Packages
+            </a>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌿</div>
+            <h3 class="card-title">Traditional Healing</h3>
+            <p class="card-description">
+              Combine modern medicine with traditional Korean healing therapies
+            </p>
+            <a href="/medical#hanyang" class="btn btn-primary" style="font-size: 0.9rem; padding: 0.7rem 1.5rem;">
+              Learn More
+            </a>
+          </div>
+          <div class="card">
+            <div class="card-icon">✈️</div>
+            <h3 class="card-title">Complete Care</h3>
+            <p class="card-description">
+              Airport pickup, accommodation, and medical interpreter included
+            </p>
+            <a href="/medical#booking" class="btn btn-secondary" style="font-size: 0.9rem; padding: 0.7rem 1.5rem;">
+              Book Now
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- University & Company Partnership - Beige + Gold -->
+    <section class="section section-tourism">
+      <div class="container">
+        <h2 class="section-title">
+          Career Opportunities in Korea
+        </h2>
+        <p class="section-subtitle">
+          Connect with universities and companies in Gyeongsan area
+        </p>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-icon">🎓</div>
+            <h3 class="card-title">Partner Universities</h3>
+            <p class="card-description">
+              Yeungnam University, Daegu University, and more - Direct admission support
+            </p>
+            <a href="/universities" class="btn btn-primary" style="font-size: 0.9rem; padding: 0.7rem 1.5rem;">
+              View Universities
+            </a>
+          </div>
+          <div class="card">
+            <div class="card-icon">🏭</div>
+            <h3 class="card-title">Job Matching</h3>
+            <p class="card-description">
+              TOPIK-based job matching with local manufacturing companies
+            </p>
+            <a href="/companies" class="btn btn-primary" style="font-size: 0.9rem; padding: 0.7rem 1.5rem;">
+              Find Jobs
+            </a>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌟</div>
+            <h3 class="card-title">Settlement Support</h3>
+            <p class="card-description">
+              Visa guidance, housing support, and cultural integration programs
+            </p>
+            <a href="/dashboard" class="btn btn-primary" style="font-size: 0.9rem; padding: 0.7rem 1.5rem;">
+              Get Support
+            </a>
+          </div>
+        </div>
       </div>
     </section>
     
     <!-- Footer -->
-    <footer style="background: var(--kingdom-black); border-top: 2px solid var(--antique-gold); padding: 4rem 2rem;">
-      <div style="max-width: 1400px; margin: 0 auto; text-align: center;">
-        <div class="logo" style="font-size: 2rem; margin-bottom: 1.5rem;">
-          <i class="fas fa-scroll"></i>
-          <span>언어의 혈투</span>
-        </div>
-        <p style="color: var(--hanji-white); opacity: 0.7; margin-bottom: 1rem;">
-          회원가입 없이 즉시 사용 가능한 무료 TOPIK 학습 플랫폼
+    <footer style="background: var(--deep-navy); color: var(--pure-white); padding: 3rem 2rem; text-align: center;">
+      <div class="container">
+        <p style="margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600;">
+          🏥 TOPIK Pro - Trustworthy Korean Care
         </p>
-        <div style="color: var(--antique-gold); font-size: 0.9rem;">
-          © 2024 TOPIK Pro. All rights reserved.
+        <p style="color: rgba(255,255,255,0.7); margin-bottom: 2rem;">
+          Learn Korean. Heal in Korea. Build Your Future.
+        </p>
+        <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+          <a href="/" style="color: rgba(255,255,255,0.8); text-decoration: none;">Home</a>
+          <a href="/courses" style="color: rgba(255,255,255,0.8); text-decoration: none;">Courses</a>
+          <a href="/medical" style="color: rgba(255,255,255,0.8); text-decoration: none;">Medical</a>
+          <a href="/universities" style="color: rgba(255,255,255,0.8); text-decoration: none;">Universities</a>
+          <a href="/companies" style="color: rgba(255,255,255,0.8); text-decoration: none;">Companies</a>
         </div>
+        <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">
+          © 2026 TOPIK Pro. All rights reserved.
+        </p>
       </div>
     </footer>
+    
+    <script>
+      // 언어 선택기 이벤트
+      const langSelect = document.getElementById('lang-select');
+      if (langSelect) {
+        langSelect.addEventListener('change', (e) => {
+          window.loadTranslations(e.target.value);
+        });
+      }
+    </script>
   `);
-  
   return c.html(html);
 });
 
