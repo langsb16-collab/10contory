@@ -3,8 +3,9 @@
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  z-index: 10000;
+  z-index: 99999;
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  isolation: isolate;
 }
 
 /* 챗봇 버튼 (오렌지 배경) */
@@ -31,7 +32,6 @@
 .chatbot-button::before {
   content: '💬';
   font-size: 28px;
-  filter: brightness(0) invert(1);
 }
 
 .chatbot-button.active::before {
@@ -48,10 +48,12 @@
   max-height: 600px;
   background: #FFFFFF;
   border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   display: none;
   flex-direction: column;
+  z-index: 99999;
+  border: 2px solid rgba(255, 107, 53, 0.3);
 }
 
 .chatbot-window.open {
@@ -79,6 +81,8 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .chatbot-header h3 {
@@ -93,6 +97,8 @@
 .chatbot-header h3::before {
   content: '💬';
   font-size: 1.4rem;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .chatbot-close {

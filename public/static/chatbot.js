@@ -39,7 +39,15 @@ class ChatbotFAQ {
         </div>
       </div>
     `;
-    document.body.appendChild(container);
+    
+    // Ensure chatbot is added to body, not inside other containers
+    if (document.body) {
+      document.body.appendChild(container);
+    } else {
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.appendChild(container);
+      });
+    }
   }
 
   attachEventListeners() {
