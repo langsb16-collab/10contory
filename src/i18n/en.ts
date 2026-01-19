@@ -7,6 +7,7 @@ export const en: Translation = {
     courses: 'Courses',
     universities: 'Universities',
     companies: 'Companies',
+    medical: 'Medical Tourism',
     login: 'Login',
     signup: 'Sign Up',
     dashboard: 'Dashboard',
@@ -32,6 +33,83 @@ export const en: Translation = {
         title: 'Free Forever',
         desc: 'Complete TOPIK preparation at no cost'
       }
+    }
+  },
+  medical: {
+    hero: {
+      title: 'K-Medical Health Tour',
+      subtitle: 'Experience world-class healthcare in Gyeongsan with Korean traditional medicine',
+      cta: 'Book Health Checkup'
+    },
+    packages: {
+      title: 'Health Checkup Packages',
+      basic: {
+        title: 'Basic Health Checkup',
+        desc: 'Blood test, urine test, chest X-ray, ECG - approx. 2 hours'
+      },
+      comprehensive: {
+        title: 'Comprehensive Checkup',
+        desc: 'Full body scan + CT/MRI + Endoscopy - approx. 4 hours'
+      },
+      cancer: {
+        title: 'Cancer Screening Package',
+        desc: 'Specialized screening for 5 major cancers - approx. 5 hours'
+      },
+      vip: {
+        title: 'VIP Premium Checkup',
+        desc: 'Premium checkup + dedicated coordinator + limousine service - approx. 6 hours'
+      }
+    },
+    hanyang: {
+      title: 'Korean Medicine Healing',
+      subtitle: 'Restore your body and mind with personalized Korean traditional medicine',
+      digestive: {
+        title: 'Digestive Acupuncture & Moxibustion',
+        desc: 'Treatment for digestive issues and stomach disorders - approx. 60 min'
+      },
+      musculoskeletal: {
+        title: 'Musculoskeletal Chuna Therapy',
+        desc: 'Relief for neck, shoulder, and back pain - approx. 45 min'
+      },
+      stress: {
+        title: 'Stress Relief Herbal Acupuncture',
+        desc: 'Stress relief and mental stability - approx. 50 min'
+      },
+      constitutional: {
+        title: 'Constitutional Herbal Medicine',
+        desc: 'Personalized herbal prescription based on constitution - approx. 30 min'
+      }
+    },
+    benefits: {
+      title: 'Why Gyeongsan Medical Tourism?',
+      benefit1: {
+        title: 'Affordable Cost',
+        desc: '30-50% cheaper than major cities'
+      },
+      benefit2: {
+        title: 'No Waiting Time',
+        desc: 'Immediate appointment, same-day results'
+      },
+      benefit3: {
+        title: 'Integrated Care',
+        desc: 'Western medicine + Traditional Korean medicine synergy'
+      },
+      benefit4: {
+        title: 'Medical Interpretation',
+        desc: 'Support in 11 languages with escort service'
+      }
+    },
+    booking: {
+      title: 'Book Health Checkup',
+      name: 'Full Name',
+      email: 'Email',
+      phone: 'Phone Number',
+      nationality: 'Nationality',
+      checkupDate: 'Preferred Date',
+      package: 'Checkup Package',
+      hanyang: 'Korean Medicine Program (Optional)',
+      interpreter: 'Need Interpreter',
+      submit: 'Book Now'
     }
   },
   auth: {
@@ -75,6 +153,8 @@ export const en: Translation = {
     view: 'View',
     loading: 'Loading...',
     error: 'Error',
-    success: 'Success'
+    success: 'Success',
+    bookNow: 'Book Now',
+    learnMore: 'Learn More'
   }
 };

@@ -22,6 +22,7 @@ export interface Translation {
     courses: string;
     universities: string;
     companies: string;
+    medical: string;
     login: string;
     signup: string;
     dashboard: string;
@@ -39,6 +40,48 @@ export interface Translation {
       feature1: { title: string; desc: string };
       feature2: { title: string; desc: string };
       feature3: { title: string; desc: string };
+    };
+  };
+  // Medical Tourism
+  medical: {
+    hero: {
+      title: string;
+      subtitle: string;
+      cta: string;
+    };
+    packages: {
+      title: string;
+      basic: { title: string; desc: string };
+      comprehensive: { title: string; desc: string };
+      cancer: { title: string; desc: string };
+      vip: { title: string; desc: string };
+    };
+    hanyang: {
+      title: string;
+      subtitle: string;
+      digestive: { title: string; desc: string };
+      musculoskeletal: { title: string; desc: string };
+      stress: { title: string; desc: string };
+      constitutional: { title: string; desc: string };
+    };
+    benefits: {
+      title: string;
+      benefit1: { title: string; desc: string };
+      benefit2: { title: string; desc: string };
+      benefit3: { title: string; desc: string };
+      benefit4: { title: string; desc: string };
+    };
+    booking: {
+      title: string;
+      name: string;
+      email: string;
+      phone: string;
+      nationality: string;
+      checkupDate: string;
+      package: string;
+      hanyang: string;
+      interpreter: string;
+      submit: string;
     };
   };
   // Auth
@@ -86,5 +129,7 @@ export interface Translation {
     loading: string;
     error: string;
     success: string;
+    bookNow: string;
+    learnMore: string;
   };
 }
