@@ -1,4 +1,5 @@
 import { en } from './en';
+import { ko } from './ko';
 import { zh } from './zh';
 import { es } from './es';
 import { Translation, Language, SUPPORTED_LANGUAGES } from './types';
@@ -17,7 +18,8 @@ const pt: Translation = { ...en }; // Portuguese - to be translated
 const ru: Translation = { ...en }; // Russian - to be translated
 const id: Translation = { ...en }; // Indonesian - to be translated
 
-export const translations: Record<Language, Translation> = {
+export const translations: Record<string, Translation> = {
+  ko,
   en,
   zh,
   es,
@@ -30,6 +32,6 @@ export const translations: Record<Language, Translation> = {
   id
 };
 
-export function getTranslation(lang: Language): Translation {
+export function getTranslation(lang: string): Translation {
   return translations[lang] || translations.en;
 }
