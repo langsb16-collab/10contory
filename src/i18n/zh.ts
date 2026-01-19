@@ -7,7 +7,7 @@ export const zh: Translation = {
     courses: '课程',
     universities: '大学',
     companies: '公司',
-    medical: '医疗旅游',
+    medical: '健康检查',
     login: '登录',
     signup: '注册',
     dashboard: '仪表板',
@@ -33,83 +33,6 @@ export const zh: Translation = {
         title: '永久免费',
         desc: '完全免费的TOPIK备考'
       }
-    }
-  },
-  medical: {
-    hero: {
-      title: 'K-医疗健康之旅',
-      subtitle: '在庆山体验世界级医疗服务与韩方传统医学',
-      cta: '预约健康检查'
-    },
-    packages: {
-      title: '健康检查套餐',
-      basic: {
-        title: '基础健康检查',
-        desc: '血液检查、尿检、胸部X光、心电图 - 约2小时'
-      },
-      comprehensive: {
-        title: '综合精密检查',
-        desc: '全身扫描 + CT/MRI + 内窥镜 - 约4小时'
-      },
-      cancer: {
-        title: '五大癌症筛查套餐',
-        desc: '胃癌、大肠癌、肝癌、肺癌、乳腺癌专项筛查 - 约5小时'
-      },
-      vip: {
-        title: 'VIP尊享检查',
-        desc: '高端健康检查 + 专属协调员 + 豪华轿车服务 - 约6小时'
-      }
-    },
-    hanyang: {
-      title: '韩方调理项目',
-      subtitle: '检查后通过个性化韩医治疗恢复身心健康',
-      digestive: {
-        title: '消化系统针灸艾灸',
-        desc: '改善消化不良、肠胃障碍 - 约60分钟'
-      },
-      musculoskeletal: {
-        title: '筋骨推拿疗法',
-        desc: '缓解颈肩腰痛 - 约45分钟'
-      },
-      stress: {
-        title: '减压药针治疗',
-        desc: '缓解压力、安定身心 - 约50分钟'
-      },
-      constitutional: {
-        title: '体质定制中药',
-        desc: '根据个人体质开处中药 - 约30分钟'
-      }
-    },
-    benefits: {
-      title: '庆山医疗旅游的优势',
-      benefit1: {
-        title: '价格合理',
-        desc: '比大城市便宜30-50%'
-      },
-      benefit2: {
-        title: '无需等待',
-        desc: '预约即可检查,当天出结果'
-      },
-      benefit3: {
-        title: '综合调理',
-        desc: '西医 + 传统韩医的协同效应'
-      },
-      benefit4: {
-        title: '医疗翻译支持',
-        desc: '11种语言医疗翻译及陪同服务'
-      }
-    },
-    booking: {
-      title: '预约健康检查',
-      name: '姓名',
-      email: '电子邮箱',
-      phone: '电话号码',
-      nationality: '国籍',
-      checkupDate: '希望日期',
-      package: '检查套餐',
-      hanyang: '韩方项目(可选)',
-      interpreter: '需要翻译',
-      submit: '立即预约'
     }
   },
   auth: {
@@ -157,6 +80,74 @@ export const zh: Translation = {
       results: '结果：立即查看'
     },
     startButton: '开始测试'
+  },
+  medical: {
+    hero: {
+      title: 'K-医疗健康之旅',
+      subtitle: '体验1-3天健康体检和韩方康复疗程',
+      description: '庆山市结合尖端医疗设施和传统韩医治疗的特别健康旅游项目。相比大城市价格低廉，享受顶级医疗服务。'
+    },
+    packages: {
+      basic: {
+        title: '基础健康体检',
+        price: '₩350,000',
+        features: ['基本身体测量', '血液检查', '尿液检查', '胸部X光', '心电图检查']
+      },
+      comprehensive: {
+        title: '精密健康体检',
+        price: '₩750,000',
+        features: ['包含基础体检', '腹部超声波', '胃内窥镜', 'CT扫描', '肿瘤标志物检查', '营养咨询']
+      },
+      cancer: {
+        title: '癌症精密筛查',
+        price: '₩1,200,000',
+        features: ['包含精密体检', 'PET-CT', '全身MRI', '基因检测', '癌症专家咨询']
+      },
+      vip: {
+        title: 'VIP高管套餐',
+        price: '₩2,500,000',
+        features: ['包含癌症筛查', '1对1专属协调员', '高级韩方治疗', '豪华酒店', '专车接送', '美食韩定食']
+      }
+    },
+    hanyang: {
+      title: '韩方康复项目',
+      subtitle: '体检后调理身心的传统韩医护理',
+      digestive: {
+        title: '消化系统护理',
+        desc: '针灸·艾灸改善消化功能'
+      },
+      musculoskeletal: {
+        title: '肌骨系统护理',
+        desc: '推拿疗法矫正脊椎·关节'
+      },
+      stress: {
+        title: '压力缓解',
+        desc: '药针·韩方疗法稳定身心'
+      },
+      constitutional: {
+        title: '体质分析',
+        desc: '四象体质诊断及定制生活指南'
+      }
+    },
+    benefits: {
+      title: '为什么选择庆山？',
+      benefit1: '相比大城市费用低30-50%',
+      benefit2: '等待时间最短，当日可体检',
+      benefit3: '结合韩医治疗的差异化项目',
+      benefit4: '岭南大学医院、庆山中央医院等可信赖医疗机构'
+    },
+    booking: {
+      title: '预约健康体检',
+      name: '姓名',
+      email: '邮箱',
+      phone: '电话号码',
+      nationality: '国籍',
+      checkupDate: '希望体检日期',
+      package: '体检套餐',
+      hanyang: '添加韩方项目',
+      interpreter: '需要医疗翻译',
+      submit: '提交预约申请'
+    }
   },
   common: {
     save: '保存',
