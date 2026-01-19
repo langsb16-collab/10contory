@@ -45,6 +45,7 @@ function renderKingdomHTML(content: string, title: string = 'TOPIK Pro - 언어�
     
     <!-- Custom Styles -->
     <link href="/static/kingdom-theme.css" rel="stylesheet">
+    <link href="/static/chatbot.css" rel="stylesheet">
     
     <!-- Axios for API calls -->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
@@ -70,6 +71,8 @@ function renderKingdomHTML(content: string, title: string = 'TOPIK Pro - 언어�
     
     <!-- Kingdom Theme Script -->
     <script src="/static/kingdom-theme.js"></script>
+    <!-- Chatbot Script -->
+    <script src="/static/chatbot.js"></script>
 </body>
 </html>
   `;

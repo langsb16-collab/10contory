@@ -1,0 +1,345 @@
+/* ==================== 챗봇 스타일 (오렌지 테마) ==================== */
+.chatbot-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 10000;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* 챗봇 버튼 (오렌지 배경) */
+.chatbot-button {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.chatbot-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(255, 107, 53, 0.6);
+}
+
+.chatbot-button::before {
+  content: '💬';
+  font-size: 28px;
+  filter: brightness(0) invert(1);
+}
+
+.chatbot-button.active::before {
+  content: '✕';
+  font-size: 24px;
+}
+
+/* 챗봇 창 (오렌지 헤더) */
+.chatbot-window {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 380px;
+  max-height: 600px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+}
+
+.chatbot-window.open {
+  display: flex;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 헤더 (오렌지 그라데이션) */
+.chatbot-header {
+  background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%);
+  color: #FFFFFF;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
+}
+
+.chatbot-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chatbot-header h3::before {
+  content: '💬';
+  font-size: 1.4rem;
+}
+
+.chatbot-close {
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.chatbot-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 카테고리 탭 */
+.chatbot-categories {
+  display: flex;
+  background: #F8F9FA;
+  border-bottom: 2px solid #E9ECEF;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.category-tab {
+  flex: 1;
+  min-width: 80px;
+  padding: 0.6rem 0.8rem;
+  border: none;
+  background: transparent;
+  color: #6C757D;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+}
+
+.category-tab:hover {
+  color: #FF6B35;
+  background: rgba(255, 107, 53, 0.05);
+}
+
+.category-tab.active {
+  color: #FF6B35;
+  border-bottom-color: #FF6B35;
+  background: rgba(255, 107, 53, 0.1);
+}
+
+/* FAQ 리스트 */
+.chatbot-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  background: #FFFFFF;
+  max-height: 450px;
+}
+
+.chatbot-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatbot-content::-webkit-scrollbar-track {
+  background: #F8F9FA;
+}
+
+.chatbot-content::-webkit-scrollbar-thumb {
+  background: #FF6B35;
+  border-radius: 3px;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* FAQ 아이템 (아코디언) */
+.faq-item {
+  border: 1px solid #E9ECEF;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #FFFFFF;
+  transition: all 0.2s ease;
+}
+
+.faq-item:hover {
+  border-color: #FF6B35;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.1);
+}
+
+.faq-question {
+  padding: 0.9rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: #FFFFFF;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #212529;
+  transition: all 0.2s ease;
+  line-height: 1.3;
+}
+
+.faq-question:hover {
+  background: rgba(255, 107, 53, 0.05);
+  color: #FF6B35;
+}
+
+.faq-question::after {
+  content: '▼';
+  font-size: 0.7rem;
+  color: #6C757D;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.faq-item.open .faq-question::after {
+  transform: rotate(180deg);
+  color: #FF6B35;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: #F8F9FA;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 300px;
+}
+
+.faq-answer-content {
+  padding: 1rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #495057;
+  border-top: 1px solid #E9ECEF;
+}
+
+/* 페이지네이션 */
+.chatbot-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-top: 1px solid #E9ECEF;
+  background: #F8F9FA;
+}
+
+.page-button {
+  padding: 0.5rem 0.8rem;
+  border: 1px solid #DEE2E6;
+  background: #FFFFFF;
+  color: #495057;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  min-width: 35px;
+}
+
+.page-button:hover:not(:disabled) {
+  background: #FF6B35;
+  color: #FFFFFF;
+  border-color: #FF6B35;
+}
+
+.page-button.active {
+  background: #FF6B35;
+  color: #FFFFFF;
+  border-color: #FF6B35;
+}
+
+.page-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 0.85rem;
+  color: #6C757D;
+  font-weight: 600;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .chatbot-container {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  .chatbot-window {
+    width: calc(100vw - 2rem);
+    max-width: 360px;
+    max-height: 500px;
+  }
+
+  .chatbot-content {
+    max-height: 350px;
+  }
+
+  .faq-question {
+    font-size: 0.85rem;
+    padding: 0.8rem 0.9rem;
+  }
+
+  .faq-answer-content {
+    font-size: 0.8rem;
+    padding: 0.9rem;
+  }
+
+  .category-tab {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.6rem;
+  }
+}
+
+/* 짧고 읽기 쉬운 글자 */
+.faq-question,
+.faq-answer-content {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 1줄 제목 원칙 (모바일) */
+@media (max-width: 480px) {
+  .faq-question {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

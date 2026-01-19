@@ -77,6 +77,16 @@ async function loadTranslations(lang) {
     translations = response.data;
     currentLang = lang;
     localStorage.setItem('topik_lang', lang);
+    
+    // 전역으로 번역 데이터 노출 (챗봇용)
+    window.translations = window.translations || {};
+    window.translations[lang] = translations;
+    
+    // 언어 변경 이벤트 발생
+    window.dispatchEvent(new CustomEvent('languageChanged', {
+      detail: { language: lang, translations }
+    }));
+    
     updateUI();
   } catch (error) {
     console.error('Failed to load translations:', error);

@@ -92,6 +92,58 @@ export interface Translation {
     };
     startButton: string;
   };
+  // Medical Tourism
+  medical: {
+    hero: {
+      title: string;
+      subtitle: string;
+      description: string;
+    };
+    packages: {
+      basic: { title: string; price: string; features: string[] };
+      comprehensive: { title: string; price: string; features: string[] };
+      cancer: { title: string; price: string; features: string[] };
+      vip: { title: string; price: string; features: string[] };
+    };
+    hanyang: {
+      title: string;
+      subtitle: string;
+      digestive: { title: string; desc: string };
+      musculoskeletal: { title: string; desc: string };
+      stress: { title: string; desc: string };
+      constitutional: { title: string; desc: string };
+    };
+    benefits: {
+      title: string;
+      benefit1: string;
+      benefit2: string;
+      benefit3: string;
+      benefit4: string;
+    };
+    booking: {
+      title: string;
+      name: string;
+      email: string;
+      phone: string;
+      nationality: string;
+      checkupDate: string;
+      package: string;
+      hanyang: string;
+      interpreter: string;
+      submit: string;
+    };
+  };
+  // Chatbot FAQ
+  chatbot: {
+    title: string;
+    categories: {
+      overview: string;
+      medical: string;
+      hanyang: string;
+      travel: string;
+    };
+    faq: Array<{ q: string; a: string }>;
+  };
   // Common
   common: {
     save: string;
@@ -102,5 +154,7 @@ export interface Translation {
     loading: string;
     error: string;
     success: string;
+    bookNow: string;
+    learnMore: string;
   };
 }
