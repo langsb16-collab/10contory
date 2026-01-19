@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { serveStatic } from 'hono/cloudflare-workers';
 import type { Bindings } from './types';
-import { getTranslation } from './i18n';
+import { getTranslation, SUPPORTED_LANGUAGES } from './i18n';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -134,7 +134,7 @@ app.get('/api/lessons', async (c) => {
 });
 
 // ============================================
-// Frontend Routes - NO LOGIN REQUIRED
+// Frontend Routes
 // ============================================
 
 // Home page - 킹덤 테마 (로그인 버튼 제거)
@@ -144,15 +144,17 @@ app.get('/', (c) => {
     <nav class="navbar">
       <div class="navbar-container">
         <div class="logo">
-          <i class="fas fa-scroll mr-2"></i>
-          <span>언어의 혈투</span>
+          <a href="/" style="color: inherit; text-decoration: none;">
+            <i class="fas fa-scroll mr-2"></i>
+            <span>언어의 혈투</span>
+          </a>
         </div>
         <ul class="nav-links desktop-nav">
           <li><a href="/" data-i18n="nav.home">홈</a></li>
           <li><a href="/courses" data-i18n="nav.courses">강의</a></li>
-          <li><a href="/diagnostic" data-i18n="nav.universities">진단 테스트</a></li>
           <li><a href="/universities" data-i18n="nav.universities">대학</a></li>
           <li><a href="/companies" data-i18n="nav.companies">기업</a></li>
+          <li><a href="/diagnostic" class="seal-button" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">진단 테스트</a></li>
         </ul>
         <button class="mobile-menu">
           <i class="fas fa-bars" style="color: var(--antique-gold); font-size: 1.5rem;"></i>
@@ -187,7 +189,7 @@ app.get('/', (c) => {
           — 조선의 언어를 넘어, 세계의 지혜를 탐하라
         </p>
         <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-          <a href="/courses" class="seal-button ink-spread" data-i18n="home.hero.cta">
+          <a href="/dashboard" class="seal-button ink-spread" data-i18n="home.hero.cta">
             학습 시작하기
           </a>
           <a href="/diagnostic" class="seal-button ink-spread" style="background: var(--antique-gold); color: var(--kingdom-black);">
@@ -317,10 +319,10 @@ app.get('/', (c) => {
           정복의 시작은 지금이다
         </h2>
         <p class="hero-subtitle" style="font-size: clamp(1rem, 2.5vw, 1.5rem);">
-          수천 명의 학습자와 함께 TOPIK 목표를 달성하라
+          회원가입 없이 즉시 시작 - 완전 무료 플랫폼
         </p>
-        <a href="/courses" class="seal-button ink-spread">
-          바로 시작하기 - 무료 평생 이용
+        <a href="/dashboard" class="seal-button ink-spread">
+          바로 시작하기
         </a>
       </div>
     </section>
@@ -333,10 +335,10 @@ app.get('/', (c) => {
           <span>언어의 혈투</span>
         </div>
         <p style="color: var(--hanji-white); opacity: 0.7; margin-bottom: 1rem;">
-          무료 다국어 TOPIK 학습 플랫폼 - 로그인 없이 바로 시작
+          회원가입 없이 즉시 사용 가능한 무료 TOPIK 학습 플랫폼
         </p>
         <div style="color: var(--antique-gold); font-size: 0.9rem;">
-          © 2024 TOPIK Pro. All rights reserved. | 언어·문화·일자리를 하나로
+          © 2024 TOPIK Pro. All rights reserved.
         </div>
       </div>
     </footer>
@@ -345,8 +347,8 @@ app.get('/', (c) => {
   return c.html(html);
 });
 
-// Courses page - 강의 목록 (로그인 불필요)
-app.get('/courses', (c) => {
+// Dashboard (게스트 모드로 즉시 접근 가능)
+app.get('/dashboard', (c) => {
   const html = renderKingdomHTML(`
     <!-- Navigation -->
     <nav class="navbar">
@@ -359,113 +361,110 @@ app.get('/courses', (c) => {
         </div>
         <ul class="nav-links desktop-nav">
           <li><a href="/">홈</a></li>
-          <li><a href="/courses" style="color: var(--blood-red);">강의</a></li>
-          <li><a href="/diagnostic">진단 테스트</a></li>
+          <li><a href="/courses">강의</a></li>
           <li><a href="/universities">대학</a></li>
           <li><a href="/companies">기업</a></li>
+          <li><a href="/dashboard" class="seal-button" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">대시보드</a></li>
         </ul>
       </div>
     </nav>
     
-    <!-- Language Selector -->
-    <div class="lang-selector">
-      <select id="langSelect" class="lang-select">
-        <option value="ko">🇰🇷 한국어</option>
-        <option value="en">🌐 English</option>
-        <option value="zh">🌐 中文</option>
-      </select>
-    </div>
-    
-    <!-- Courses Section -->
-    <section class="hero-section" style="padding-top: 8rem;">
+    <!-- Dashboard Content -->
+    <section class="hero-section" style="min-height: 100vh; padding-top: 8rem;">
       <div class="hero-content" style="max-width: 1200px;">
         <h1 class="hero-title" style="font-size: 3rem; margin-bottom: 2rem;">
-          제1장: 언어 정복의 서막
+          전사의 여정
         </h1>
-        <p class="hero-subtitle" style="margin-bottom: 4rem;">
-          TOPIK 급수별 전투 준비 - 바로 시작 가능
-        </p>
         
-        <!-- Level Selection -->
-        <div class="features-grid">
-          <!-- TOPIK I - Level 1 -->
-          <div class="feature-card ink-spread" style="cursor: pointer;" onclick="window.location.href='/courses/topik-1'">
-            <div class="feature-icon">⚔️</div>
-            <h3 class="feature-title">TOPIK I - 1급</h3>
-            <p class="feature-desc">
-              입문자를 위한 기초 훈련<br>
-              • 한글 익히기<br>
-              • 기본 인사와 자기소개<br>
-              • 숫자와 시간 표현
-            </p>
-            <div style="margin-top: 1.5rem; color: var(--antique-gold); font-weight: 600;">
-              즉시 입장 →
+        <!-- Progress Overview -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+          <!-- Current Level Card -->
+          <div class="feature-card">
+            <h3 class="feature-title" style="font-size: 1.5rem; margin-bottom: 1rem;">현재 급수</h3>
+            <div style="font-size: 3rem; font-weight: 900; color: var(--antique-gold); font-family: 'Hahmlet', serif;">
+              입문
             </div>
+            <p style="color: var(--hanji-white); opacity: 0.8; margin-top: 1rem;">
+              TOPIK I 준비 단계
+            </p>
           </div>
           
-          <!-- TOPIK I - Level 2 -->
-          <div class="feature-card ink-spread" style="cursor: pointer;" onclick="window.location.href='/courses/topik-2'">
-            <div class="feature-icon">🗡️</div>
-            <h3 class="feature-title">TOPIK I - 2급</h3>
-            <p class="feature-desc">
-              초급 전사의 길<br>
-              • 일상 회화<br>
-              • 기본 문법 활용<br>
-              • 간단한 글쓰기
-            </p>
-            <div style="margin-top: 1.5rem; color: var(--antique-gold); font-weight: 600;">
-              즉시 입장 →
+          <!-- Target Level Card -->
+          <div class="feature-card">
+            <h3 class="feature-title" style="font-size: 1.5rem; margin-bottom: 1rem;">목표 급수</h3>
+            <div style="font-size: 3rem; font-weight: 900; color: var(--blood-red); font-family: 'Hahmlet', serif;">
+              3급
             </div>
+            <p style="color: var(--hanji-white); opacity: 0.8; margin-top: 1rem;">
+              TOPIK II 중급
+            </p>
           </div>
           
-          <!-- TOPIK II - Level 3-4 -->
-          <div class="feature-card ink-spread" style="cursor: pointer;" onclick="window.location.href='/courses/topik-3-4'">
-            <div class="feature-icon">🏹</div>
-            <h3 class="feature-title">TOPIK II - 3·4급</h3>
-            <p class="feature-desc">
-              중급 혈투의 장<br>
-              • 다양한 주제 대화<br>
-              • 복잡한 문법 구조<br>
-              • 논리적 글쓰기
-            </p>
-            <div style="margin-top: 1.5rem; color: var(--antique-gold); font-weight: 600;">
-              즉시 입장 →
+          <!-- Progress Card -->
+          <div class="feature-card">
+            <h3 class="feature-title" style="font-size: 1.5rem; margin-bottom: 1rem;">정복 진도</h3>
+            <div style="font-size: 3rem; font-weight: 900; color: var(--glow-cyan); font-family: 'Hahmlet', serif;">
+              15%
             </div>
-          </div>
-          
-          <!-- TOPIK II - Level 5-6 -->
-          <div class="feature-card ink-spread" style="cursor: pointer;" onclick="window.location.href='/courses/topik-5-6'">
-            <div class="feature-icon">👑</div>
-            <h3 class="feature-title">TOPIK II - 5·6급</h3>
-            <p class="feature-desc">
-              고급 정복자의 영역<br>
-              • 전문적 주제 논의<br>
-              • 고급 어휘와 표현<br>
-              • 학술적 글쓰기
+            <p style="color: var(--hanji-white); opacity: 0.8; margin-top: 1rem;">
+              학습 시작
             </p>
-            <div style="margin-top: 1.5rem; color: var(--antique-gold); font-weight: 600;">
-              즉시 입장 →
-            </div>
           </div>
         </div>
         
-        <!-- Quick Links -->
-        <div style="margin-top: 4rem; text-align: center;">
-          <a href="/diagnostic" class="seal-button ink-spread" style="margin: 0 1rem;">
-            내 급수 진단하기
+        <!-- Today's Tasks -->
+        <div class="feature-card" style="margin-bottom: 3rem;">
+          <h2 class="feature-title" style="font-size: 2rem; margin-bottom: 2rem;">오늘의 임무</h2>
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <a href="/lessons/grammar" class="seal-button ink-spread" style="width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center;">
+              <span><i class="fas fa-book mr-3"></i>문법 학습 - 제1장: 기초</span>
+              <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="/lessons/vocabulary" class="seal-button ink-spread" style="width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center; background: var(--antique-gold); color: var(--kingdom-black);">
+              <span><i class="fas fa-language mr-3"></i>어휘 암기 - 일상 표현</span>
+              <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="/diagnostic" class="seal-button ink-spread" style="width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center;">
+              <span><i class="fas fa-chart-line mr-3"></i>진단 테스트 - 현재 실력 확인</span>
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+          <a href="/mock-exam" class="feature-card ink-spread" style="text-decoration: none; color: inherit; cursor: pointer;">
+            <div class="feature-icon">📝</div>
+            <h3 class="feature-title">모의고사 응시</h3>
+            <p class="feature-desc">실전과 동일한 환경에서 실력 점검</p>
           </a>
-          <a href="/culture/cooking" class="seal-button ink-spread" style="background: var(--antique-gold); color: var(--kingdom-black); margin: 0 1rem;">
-            문화 체험하기
+          
+          <a href="/universities" class="feature-card ink-spread" style="text-decoration: none; color: inherit; cursor: pointer;">
+            <div class="feature-icon">🎓</div>
+            <h3 class="feature-title">대학 탐색</h3>
+            <p class="feature-desc">경산 지역 협력 대학 정보</p>
+          </a>
+          
+          <a href="/companies" class="feature-card ink-spread" style="text-decoration: none; color: inherit; cursor: pointer;">
+            <div class="feature-icon">🏢</div>
+            <h3 class="feature-title">기업 매칭</h3>
+            <p class="feature-desc">제조업 취업 기회 탐색</p>
+          </a>
+          
+          <a href="/culture/cooking" class="feature-card ink-spread" style="text-decoration: none; color: inherit; cursor: pointer;">
+            <div class="feature-icon">🍜</div>
+            <h3 class="feature-title">문화 체험</h3>
+            <p class="feature-desc">한국 요리와 태권도 학습</p>
           </a>
         </div>
       </div>
     </section>
-  `, '강의 목록 - 언어의 혈투');
+  `, '대시보드 - 언어의 혈투');
   
   return c.html(html);
 });
 
-// Diagnostic Test - 진단 테스트 (로그인 불필요)
+// Diagnostic Test Page
 app.get('/diagnostic', (c) => {
   const html = renderKingdomHTML(`
     <!-- Navigation -->
@@ -480,203 +479,87 @@ app.get('/diagnostic', (c) => {
       </div>
     </nav>
     
+    <!-- Diagnostic Test -->
     <section class="hero-section">
       <div class="hero-content" style="max-width: 800px;">
         <h1 class="hero-title" style="font-size: 2.5rem; margin-bottom: 2rem;">
-          전사의 능력 측정
+          급수 진단 테스트
         </h1>
         <p class="hero-subtitle" style="margin-bottom: 3rem;">
-          10분 간이 테스트로 현재 TOPIK 급수 예측
+          현재 실력을 측정하고 맞춤 학습 계획을 받으세요
         </p>
         
-        <div style="background: rgba(13, 13, 13, 0.9); padding: 3rem; border: 2px solid var(--antique-gold); border-radius: 12px;">
-          <div style="margin-bottom: 2rem;">
-            <h3 style="color: var(--antique-gold); font-size: 1.5rem; margin-bottom: 1rem;">📊 테스트 구성</h3>
-            <ul style="color: var(--hanji-white); line-height: 2; list-style: none; padding-left: 1.5rem;">
-              <li>✓ 어휘: 10문항 (3분)</li>
-              <li>✓ 문법: 10문항 (3분)</li>
-              <li>✓ 읽기: 5문항 (4분)</li>
-            </ul>
+        <div class="feature-card">
+          <h2 class="feature-title" style="margin-bottom: 2rem;">테스트 정보</h2>
+          <div style="text-align: left; color: var(--hanji-white); line-height: 2;">
+            <p><i class="fas fa-clock mr-2" style="color: var(--antique-gold);"></i> 소요 시간: 약 20분</p>
+            <p><i class="fas fa-list mr-2" style="color: var(--antique-gold);"></i> 문항 수: 30문항</p>
+            <p><i class="fas fa-chart-bar mr-2" style="color: var(--antique-gold);"></i> 평가 영역: 듣기, 읽기, 쓰기</p>
+            <p><i class="fas fa-certificate mr-2" style="color: var(--antique-gold);"></i> 결과: 즉시 확인 가능</p>
           </div>
           
-          <div style="margin-bottom: 2rem; padding: 1.5rem; background: rgba(197, 160, 89, 0.1); border-radius: 8px;">
-            <p style="color: var(--hanji-white); margin-bottom: 0.5rem;">
-              <i class="fas fa-info-circle" style="color: var(--antique-gold);"></i>
-              <strong style="color: var(--antique-gold);"> 즉시 시작 가능</strong>
-            </p>
-            <p style="color: var(--hanji-white); opacity: 0.9; font-size: 0.95rem;">
-              로그인 없이 바로 테스트를 시작할 수 있습니다. 결과는 브라우저에 저장되어 언제든 확인 가능합니다.
-            </p>
-          </div>
-          
-          <button onclick="startDiagnostic()" class="seal-button ink-spread" style="width: 100%; font-size: 1.2rem;">
-            전투 시작하기 <i class="fas fa-arrow-right ml-2"></i>
+          <button onclick="startDiagnostic()" class="seal-button ink-spread" style="width: 100%; margin-top: 2rem; font-size: 1.2rem;">
+            진단 시작하기
           </button>
         </div>
         
-        <div id="testContainer" style="display: none; margin-top: 3rem;">
-          <div style="background: rgba(13, 13, 13, 0.9); padding: 3rem; border: 2px solid var(--blood-red); border-radius: 12px;">
-            <div id="question" style="color: var(--hanji-white); font-size: 1.3rem; margin-bottom: 2rem;"></div>
-            <div id="options" style="display: grid; gap: 1rem;"></div>
-            <div style="margin-top: 2rem; display: flex; justify-content: space-between; align-items: center;">
-              <div style="color: var(--antique-gold);">
-                문제 <span id="currentQ">1</span> / 25
-              </div>
-              <div style="color: var(--blood-red);">
-                남은 시간: <span id="timer">10:00</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div id="resultContainer" style="display: none; margin-top: 3rem;">
-          <div style="background: rgba(13, 13, 13, 0.9); padding: 3rem; border: 2px solid var(--antique-gold); border-radius: 12px; text-align: center;">
-            <h2 style="color: var(--blood-red); font-size: 2rem; margin-bottom: 1rem;">전투 결과</h2>
-            <div style="font-size: 4rem; color: var(--antique-gold); margin: 2rem 0;">
-              <span id="predictedLevel">?</span>급
-            </div>
-            <p style="color: var(--hanji-white); font-size: 1.2rem; margin-bottom: 2rem;">
-              예상 TOPIK 급수
+        <div id="testArea" style="display: none; margin-top: 3rem;">
+          <div class="feature-card">
+            <h3 class="feature-title">문제 1/30</h3>
+            <p style="color: var(--hanji-white); font-size: 1.2rem; margin: 2rem 0;">
+              다음 중 올바른 문장은?
             </p>
-            <div id="scoreDetail" style="color: var(--hanji-white); opacity: 0.9; margin-bottom: 2rem;"></div>
-            <a href="/courses" class="seal-button ink-spread" style="margin: 0 1rem;">
-              맞춤 강의 시작
-            </a>
-            <button onclick="location.reload()" class="seal-button ink-spread" style="background: var(--antique-gold); color: var(--kingdom-black); margin: 0 1rem;">
-              재도전
-            </button>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <button class="seal-button ink-spread" style="width: 100%; background: rgba(242, 239, 233, 0.1);">
+                1. 저는 학교에 갑니다.
+              </button>
+              <button class="seal-button ink-spread" style="width: 100%; background: rgba(242, 239, 233, 0.1);">
+                2. 저는 학교에 가요.
+              </button>
+              <button class="seal-button ink-spread" style="width: 100%; background: rgba(242, 239, 233, 0.1);">
+                3. 저는 학교를 갑니다.
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
     
     <script>
-      // Simple diagnostic test implementation
-      let currentQuestion = 0;
-      let score = 0;
-      let timeLeft = 600; // 10 minutes
-      let timerInterval;
-      
-      const questions = [
-        { q: "안녕하세요?의 의미는?", options: ["Hello", "Goodbye", "Thank you", "Sorry"], answer: 0, category: "vocabulary" },
-        { q: "저는 학생___.", options: ["이에요", "입니다", "해요", "가요"], answer: 1, category: "grammar" },
-        { q: "'감사합니다'의 의미는?", options: ["I'm sorry", "Thank you", "Excuse me", "Please"], answer: 1, category: "vocabulary" },
-        { q: "이것___ 책입니다.", options: ["은", "이", "을", "에"], answer: 0, category: "grammar" },
-        { q: "'오늘'의 의미는?", options: ["Yesterday", "Today", "Tomorrow", "Now"], answer: 1, category: "vocabulary" },
-        // Add more questions here (total 25)
-      ];
-      
       function startDiagnostic() {
-        document.querySelector('.hero-content > div:first-child').style.display = 'none';
-        document.getElementById('testContainer').style.display = 'block';
-        loadQuestion();
-        startTimer();
-      }
-      
-      function loadQuestion() {
-        if (currentQuestion >= questions.length) {
-          showResult();
-          return;
-        }
-        
-        const q = questions[currentQuestion];
-        document.getElementById('question').textContent = q.q;
-        document.getElementById('currentQ').textContent = currentQuestion + 1;
-        
-        const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = '';
-        
-        q.options.forEach((opt, idx) => {
-          const button = document.createElement('button');
-          button.className = 'seal-button ink-spread';
-          button.textContent = opt;
-          button.style.width = '100%';
-          button.style.textAlign = 'left';
-          button.style.padding = '1.5rem';
-          button.onclick = () => selectAnswer(idx);
-          optionsDiv.appendChild(button);
-        });
-      }
-      
-      function selectAnswer(selected) {
-        if (selected === questions[currentQuestion].answer) {
-          score++;
-        }
-        currentQuestion++;
-        loadQuestion();
-      }
-      
-      function startTimer() {
-        timerInterval = setInterval(() => {
-          timeLeft--;
-          const mins = Math.floor(timeLeft / 60);
-          const secs = timeLeft % 60;
-          document.getElementById('timer').textContent = \`\${mins}:\${secs.toString().padStart(2, '0')}\`;
-          
-          if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            showResult();
-          }
-        }, 1000);
-      }
-      
-      function showResult() {
-        clearInterval(timerInterval);
-        document.getElementById('testContainer').style.display = 'none';
-        document.getElementById('resultContainer').style.display = 'block';
-        
-        const percentage = (score / questions.length) * 100;
-        let level = 1;
-        if (percentage >= 90) level = 6;
-        else if (percentage >= 75) level = 5;
-        else if (percentage >= 60) level = 4;
-        else if (percentage >= 45) level = 3;
-        else if (percentage >= 30) level = 2;
-        
-        document.getElementById('predictedLevel').textContent = level;
-        document.getElementById('scoreDetail').innerHTML = \`
-          <p>정답률: \${percentage.toFixed(1)}%</p>
-          <p>맞춘 문제: \${score} / \${questions.length}</p>
-          <p style="margin-top: 1rem; opacity: 0.8;">
-            이 결과는 간이 테스트 기반이며, 실제 TOPIK 점수와 다를 수 있습니다.
-          </p>
-        \`;
-        
-        // Save to localStorage
-        localStorage.setItem('topik_diagnostic_level', level);
-        localStorage.setItem('topik_diagnostic_score', score);
+        document.querySelector('.feature-card:first-child').style.display = 'none';
+        document.getElementById('testArea').style.display = 'block';
       }
     </script>
-  `, 'TOPIK 급수 진단 - 언어의 혈투');
+  `, '진단 테스트 - 언어의 혈투');
   
   return c.html(html);
 });
 
-// Universities page
+// Universities Page
 app.get('/universities', async (c) => {
   try {
     const { results } = await c.env.DB.prepare(
       'SELECT * FROM universities ORDER BY name'
     ).all();
     
-    let universitiesHTML = '';
-    for (const uni of results as any[]) {
-      const websiteLink = uni.website ? `<a href="${uni.website}" target="_blank" style="color: var(--blood-red);">웹사이트 →</a>` : '';
-      universitiesHTML += `
-        <div class="feature-card ink-spread">
-          <h3 class="feature-title">${uni.name}</h3>
-          <p class="feature-desc">
-            📍 ${uni.location}<br>
-            🎓 최소 TOPIK: ${uni.min_topik_level}급<br>
-            ${uni.scholarship_available ? '💰 장학금 가능' : ''}<br>
-            ${websiteLink}
-          </p>
+    const universitiesHTML = results.map((u: any) => `
+      <div class="feature-card ink-spread">
+        <h3 class="feature-title">${u.name}</h3>
+        <p class="feature-desc" style="margin-bottom: 1rem;">
+          <i class="fas fa-map-marker-alt mr-2"></i>${u.location}
+        </p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+          <span style="background: var(--blood-red); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem;">
+            최소 TOPIK ${u.min_topik_level}급
+          </span>
+          ${u.scholarship_available ? '<span style="background: var(--antique-gold); color: var(--kingdom-black); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem;">장학금 가능</span>' : ''}
         </div>
-      `;
-    }
+        ${u.website ? `<a href="${u.website}" target="_blank" style="color: var(--glow-cyan); font-weight: 600;">웹사이트 방문 →</a>` : ''}
+      </div>
+    `).join('');
     
     const html = renderKingdomHTML(`
-      <!-- Navigation -->
       <nav class="navbar">
         <div class="navbar-container">
           <div class="logo">
@@ -685,25 +568,15 @@ app.get('/universities', async (c) => {
               <span>언어의 혈투</span>
             </a>
           </div>
-          <ul class="nav-links desktop-nav">
-            <li><a href="/">홈</a></li>
-            <li><a href="/courses">강의</a></li>
-            <li><a href="/diagnostic">진단 테스트</a></li>
-            <li><a href="/universities" style="color: var(--blood-red);">대학</a></li>
-            <li><a href="/companies">기업</a></li>
-          </ul>
         </div>
       </nav>
       
-      <section class="hero-section" style="padding-top: 8rem;">
-        <div class="hero-content" style="max-width: 1200px;">
-          <h1 class="hero-title" style="font-size: 3rem; margin-bottom: 2rem;">
-            협력 대학 - 학문의 전당
-          </h1>
-          <p class="hero-subtitle" style="margin-bottom: 4rem;">
-            경산·경북 지역 대학 입학 연계
+      <section class="features-section" style="padding-top: 8rem;">
+        <div class="features-container">
+          <h1 class="section-title">협력 대학</h1>
+          <p style="text-align: center; color: var(--antique-gold); font-size: 1.2rem; margin-bottom: 3rem;">
+            경산 지역 우수 대학과의 연계로 여러분의 꿈을 응원합니다
           </p>
-          
           <div class="features-grid">
             ${universitiesHTML}
           </div>
@@ -713,34 +586,36 @@ app.get('/universities', async (c) => {
     
     return c.html(html);
   } catch (error) {
-    return c.text('Failed to load universities', 500);
+    return c.text('Error loading universities', 500);
   }
 });
 
-// Companies page
+// Companies Page
 app.get('/companies', async (c) => {
   try {
     const { results } = await c.env.DB.prepare(
       'SELECT * FROM companies ORDER BY name'
     ).all();
     
-    let companiesHTML = '';
-    for (const company of results as any[]) {
-      companiesHTML += `
-        <div class="feature-card ink-spread">
-          <h3 class="feature-title">${company.name}</h3>
-          <p class="feature-desc">
-            🏭 ${company.industry}<br>
-            📍 ${company.location}<br>
-            🎓 최소 TOPIK: ${company.min_topik_level}급<br>
-            ${company.visa_support ? '✈️ 비자 지원' : ''}
-          </p>
+    const companiesHTML = results.map((comp: any) => `
+      <div class="feature-card ink-spread">
+        <h3 class="feature-title">${comp.name}</h3>
+        <p class="feature-desc" style="margin-bottom: 1rem;">
+          <i class="fas fa-industry mr-2"></i>${comp.industry}
+        </p>
+        <p class="feature-desc" style="margin-bottom: 1rem;">
+          <i class="fas fa-map-marker-alt mr-2"></i>${comp.location}
+        </p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <span style="background: var(--blood-red); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem;">
+            최소 TOPIK ${comp.min_topik_level}급
+          </span>
+          ${comp.visa_support ? '<span style="background: var(--antique-gold); color: var(--kingdom-black); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem;">비자 지원</span>' : ''}
         </div>
-      `;
-    }
+      </div>
+    `).join('');
     
     const html = renderKingdomHTML(`
-      <!-- Navigation -->
       <nav class="navbar">
         <div class="navbar-container">
           <div class="logo">
@@ -749,35 +624,25 @@ app.get('/companies', async (c) => {
               <span>언어의 혈투</span>
             </a>
           </div>
-          <ul class="nav-links desktop-nav">
-            <li><a href="/">홈</a></li>
-            <li><a href="/courses">강의</a></li>
-            <li><a href="/diagnostic">진단 테스트</a></li>
-            <li><a href="/universities">대학</a></li>
-            <li><a href="/companies" style="color: var(--blood-red);">기업</a></li>
-          </ul>
         </div>
       </nav>
       
-      <section class="hero-section" style="padding-top: 8rem;">
-        <div class="hero-content" style="max-width: 1200px;">
-          <h1 class="hero-title" style="font-size: 3rem; margin-bottom: 2rem;">
-            연계 기업 - 일자리의 전장
-          </h1>
-          <p class="hero-subtitle" style="margin-bottom: 4rem;">
-            경산·경북 지역 제조업체 채용 연계
+      <section class="features-section" style="padding-top: 8rem;">
+        <div class="features-container">
+          <h1 class="section-title">협력 기업</h1>
+          <p style="text-align: center; color: var(--antique-gold); font-size: 1.2rem; margin-bottom: 3rem;">
+            경산·경북 지역 우수 제조업체와의 취업 연계
           </p>
-          
           <div class="features-grid">
             ${companiesHTML}
           </div>
         </div>
       </section>
-    `, '연계 기업 - 언어의 혈투');
+    `, '협력 기업 - 언어의 혈투');
     
     return c.html(html);
   } catch (error) {
-    return c.text('Failed to load companies', 500);
+    return c.text('Error loading companies', 500);
   }
 });
 
