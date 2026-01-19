@@ -13,6 +13,69 @@ app.use('/api/*', cors());
 app.use('/static/*', serveStatic({ root: './public' }));
 
 // ============================================
+// Helper Functions
+// ============================================
+
+function calculateTopikLevel(totalScore: number): number {
+  if (totalScore >= 230) return 6;
+  if (totalScore >= 190) return 5;
+  if (totalScore >= 150) return 4;
+  if (totalScore >= 120) return 3;
+  if (totalScore >= 80) return 2;
+  return 1;
+}
+
+// HTML 템플릿 생성 함수
+function renderKingdomHTML(content: string, title: string = 'TOPIK Pro - 언어의 혈투') {
+  return `
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;700;900&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link href="/static/kingdom-theme.css" rel="stylesheet">
+    
+    <!-- Axios for API calls -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    
+    <style>
+      @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+      <div class="ink-drops">
+        <div class="ink-drop"></div>
+        <div class="ink-drop"></div>
+        <div class="ink-drop"></div>
+      </div>
+    </div>
+    
+    <!-- 3D 훈민정음 배경 -->
+    <div class="hunminjeongeum-3d">ㄱ</div>
+    
+    ${content}
+    
+    <!-- Kingdom Theme Script -->
+    <script src="/static/kingdom-theme.js"></script>
+</body>
+</html>
+  `;
+}
+
+// ============================================
 // API Routes
 // ============================================
 
@@ -78,12 +141,10 @@ app.post('/api/auth/signup', async (c) => {
   try {
     const { email, password, name, native_language, target_topik_level, purpose } = await c.req.json();
     
-    // Basic validation
     if (!email || !password || !name || !native_language) {
       return c.json({ error: 'Missing required fields' }, 400);
     }
     
-    // In production, hash the password properly
     const password_hash = 'hashed_' + password; // Simplified for demo
     
     const result = await c.env.DB.prepare(`
@@ -116,7 +177,6 @@ app.post('/api/auth/login', async (c) => {
       return c.json({ error: 'Invalid credentials' }, 401);
     }
     
-    // In production, verify hashed password properly
     const password_hash = 'hashed_' + password;
     if (user.password_hash !== password_hash) {
       return c.json({ error: 'Invalid credentials' }, 401);
@@ -211,55 +271,32 @@ app.post('/api/mock-exams', async (c) => {
 // Frontend Routes
 // ============================================
 
-// Main HTML template function
-function renderHTML(content: string, lang: string = 'en') {
-  return `
-<!DOCTYPE html>
-<html lang="${lang}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOPIK Learning Platform - Free Korean Language Learning</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
-    <style>
-      /* Mobile-first responsive design */
-      @media (max-width: 768px) {
-        .hero-title { font-size: 1.875rem !important; }
-        .container { padding-left: 1rem; padding-right: 1rem; }
-        .card { margin-bottom: 1rem; }
-      }
-      
-      /* Smooth transitions */
-      * { transition: all 0.3s ease; }
-      
-      /* Language selector */
-      .lang-selector { 
-        position: fixed; 
-        top: 1rem; 
-        right: 1rem; 
-        z-index: 1000;
-        background: white;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      }
-      
-      /* Mobile menu */
-      .mobile-menu {
-        display: none;
-      }
-      
-      @media (max-width: 768px) {
-        .desktop-nav { display: none; }
-        .mobile-menu { display: block; }
-      }
-    </style>
-</head>
-<body class="bg-gray-50">
+// Home page - 킹덤 테마
+app.get('/', (c) => {
+  const html = renderKingdomHTML(`
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="logo">
+          <i class="fas fa-scroll mr-2"></i>
+          <span>언어의 혈투</span>
+        </div>
+        <ul class="nav-links desktop-nav">
+          <li><a href="/" data-i18n="nav.home">Home</a></li>
+          <li><a href="/courses" data-i18n="nav.courses">Courses</a></li>
+          <li><a href="/universities" data-i18n="nav.universities">Universities</a></li>
+          <li><a href="/companies" data-i18n="nav.companies">Companies</a></li>
+          <li><a href="/login" class="seal-button" style="padding: 0.8rem 2rem; font-size: 1rem;" data-i18n="nav.login">Login</a></li>
+        </ul>
+        <button class="mobile-menu">
+          <i class="fas fa-bars" style="color: var(--antique-gold); font-size: 1.5rem;"></i>
+        </button>
+      </div>
+    </nav>
+    
     <!-- Language Selector -->
     <div class="lang-selector">
-      <select id="langSelect" class="px-4 py-2 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <select id="langSelect" class="lang-select">
         <option value="en">🌐 English</option>
         <option value="zh">🌐 中文</option>
         <option value="hi">🌐 हिन्दी</option>
@@ -273,137 +310,58 @@ function renderHTML(content: string, lang: string = 'en') {
       </select>
     </div>
     
-    ${content}
-    
-    <script>
-      // Current language
-      let currentLang = localStorage.getItem('topik_lang') || 'en';
-      let translations = {};
-      
-      // Load translations
-      async function loadTranslations(lang) {
-        try {
-          const response = await axios.get('/api/translations/' + lang);
-          translations = response.data;
-          currentLang = lang;
-          localStorage.setItem('topik_lang', lang);
-          updateUI();
-        } catch (error) {
-          console.error('Failed to load translations:', error);
-        }
-      }
-      
-      // Update UI with translations
-      function updateUI() {
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-          const key = el.getAttribute('data-i18n');
-          const keys = key.split('.');
-          let value = translations;
-          for (let k of keys) {
-            value = value[k];
-            if (!value) break;
-          }
-          if (value) {
-            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-              el.placeholder = value;
-            } else {
-              el.textContent = value;
-            }
-          }
-        });
-      }
-      
-      // Language selector
-      document.getElementById('langSelect').value = currentLang;
-      document.getElementById('langSelect').addEventListener('change', (e) => {
-        loadTranslations(e.target.value);
-      });
-      
-      // Load initial translations
-      loadTranslations(currentLang);
-    </script>
-</body>
-</html>
-  `;
-}
-
-// Home page
-app.get('/', (c) => {
-  const html = renderHTML(`
-    <!-- Navigation -->
-    <nav class="bg-white shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 py-4">
-        <div class="flex justify-between items-center">
-          <div class="text-2xl font-bold text-blue-600">
-            <i class="fas fa-graduation-cap mr-2"></i>
-            TOPIK Pro
-          </div>
-          <div class="desktop-nav space-x-6">
-            <a href="/" class="text-gray-600 hover:text-blue-600" data-i18n="nav.home">Home</a>
-            <a href="/courses" class="text-gray-600 hover:text-blue-600" data-i18n="nav.courses">Courses</a>
-            <a href="/universities" class="text-gray-600 hover:text-blue-600" data-i18n="nav.universities">Universities</a>
-            <a href="/companies" class="text-gray-600 hover:text-blue-600" data-i18n="nav.companies">Companies</a>
-            <a href="/login" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" data-i18n="nav.login">Login</a>
-          </div>
-          <button class="mobile-menu text-gray-600">
-            <i class="fas fa-bars text-2xl"></i>
-          </button>
-        </div>
-      </div>
-    </nav>
-    
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20 px-4">
-      <div class="max-w-7xl mx-auto text-center">
-        <h1 class="hero-title text-5xl font-bold mb-6" data-i18n="home.hero.title">
-          Master Korean with TOPIK Pro
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title" data-i18n="home.hero.title">
+          언어는 생존이다.<br>가장 치열하게 배우고,<br>완벽하게 지배하라.
         </h1>
-        <p class="text-xl mb-8 opacity-90" data-i18n="home.hero.subtitle">
-          Free multilingual platform for TOPIK preparation and career opportunities in Korea
+        <p class="hero-subtitle" data-i18n="home.hero.subtitle">
+          — 조선의 언어를 넘어, 세계의 지혜를 탐하라
         </p>
-        <a href="/signup" class="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100" data-i18n="home.hero.cta">
-          Start Learning Now
+        <a href="/signup" class="seal-button ink-spread" data-i18n="home.hero.cta">
+          나의 언어, 지금 깨우기
         </a>
       </div>
     </section>
     
     <!-- Features Section -->
-    <section class="py-16 px-4">
-      <div class="max-w-7xl mx-auto">
-        <h2 class="text-4xl font-bold text-center mb-12" data-i18n="home.features.title">
-          Why Choose TOPIK Pro?
+    <section class="features-section">
+      <div class="features-container">
+        <h2 class="section-title" data-i18n="home.features.title">
+          왜 우리는 언어를 정복해야 하는가?
         </h2>
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="features-grid">
           <!-- Feature 1 -->
-          <div class="card bg-white p-8 rounded-xl shadow-lg hover:shadow-xl">
-            <div class="text-5xl mb-4">🤖</div>
-            <h3 class="text-2xl font-bold mb-3" data-i18n="home.features.feature1.title">
-              AI-Powered Learning
+          <div class="feature-card ink-spread">
+            <div class="feature-icon">🖊️</div>
+            <h3 class="feature-title" data-i18n="home.features.feature1.title">
+              고대 지식의 열쇠
             </h3>
-            <p class="text-gray-600" data-i18n="home.features.feature1.desc">
-              Personalized study plans based on your level and goals
+            <p class="feature-desc" data-i18n="home.features.feature1.desc">
+              AI 기반 개인화 학습으로 TOPIK 급수별 맞춤 커리큘럼 제공
             </p>
           </div>
           
           <!-- Feature 2 -->
-          <div class="card bg-white p-8 rounded-xl shadow-lg hover:shadow-xl">
-            <div class="text-5xl mb-4">🎓</div>
-            <h3 class="text-2xl font-bold mb-3" data-i18n="home.features.feature2.title">
-              University & Job Matching
+          <div class="feature-card ink-spread">
+            <div class="feature-icon">🏮</div>
+            <h3 class="feature-title" data-i18n="home.features.feature2.title">
+              미래를 향한 횃불
             </h3>
-            <p class="text-gray-600" data-i18n="home.features.feature2.desc">
-              Connect with universities and companies in Gyeongsan area
+            <p class="feature-desc" data-i18n="home.features.feature2.desc">
+              경산 지역 대학·제조업체와 직접 연계, 정착형 인재로 성장
             </p>
           </div>
           
           <!-- Feature 3 -->
-          <div class="card bg-white p-8 rounded-xl shadow-lg hover:shadow-xl">
-            <div class="text-5xl mb-4">💯</div>
-            <h3 class="text-2xl font-bold mb-3" data-i18n="home.features.feature3.title">
-              Free Forever
+          <div class="feature-card ink-spread">
+            <div class="feature-icon">⚔️</div>
+            <h3 class="feature-title" data-i18n="home.features.feature3.title">
+              세계를 지배할 힘
             </h3>
-            <p class="text-gray-600" data-i18n="home.features.feature3.desc">
-              Complete TOPIK preparation at no cost
+            <p class="feature-desc" data-i18n="home.features.feature3.desc">
+              10개 언어 지원, 영원히 무료 - 모두를 위한 한국어 교육
             </p>
           </div>
         </div>
@@ -411,49 +369,55 @@ app.get('/', (c) => {
     </section>
     
     <!-- Statistics Section -->
-    <section class="bg-blue-50 py-16 px-4">
-      <div class="max-w-7xl mx-auto">
-        <div class="grid md:grid-cols-4 gap-8 text-center">
+    <section class="features-section" style="background: linear-gradient(135deg, rgba(139, 0, 0, 0.1) 0%, rgba(13, 13, 13, 0.8) 100%); padding: 6rem 2rem;">
+      <div class="features-container">
+        <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); text-align: center;">
           <div>
-            <div class="text-4xl font-bold text-blue-600 mb-2">10+</div>
-            <div class="text-gray-600">Languages Supported</div>
+            <div class="counter" data-target="10" style="font-size: 4rem; font-weight: 900; color: var(--blood-red); font-family: 'Hahmlet', serif;">10</div>
+            <div style="color: var(--antique-gold); font-size: 1.2rem; margin-top: 1rem;">지원 언어</div>
           </div>
           <div>
-            <div class="text-4xl font-bold text-blue-600 mb-2">5</div>
-            <div class="text-gray-600">Partner Universities</div>
+            <div class="counter" data-target="5" style="font-size: 4rem; font-weight: 900; color: var(--blood-red); font-family: 'Hahmlet', serif;">5</div>
+            <div style="color: var(--antique-gold); font-size: 1.2rem; margin-top: 1rem;">협력 대학</div>
           </div>
           <div>
-            <div class="text-4xl font-bold text-blue-600 mb-2">20+</div>
-            <div class="text-gray-600">Manufacturing Companies</div>
+            <div class="counter" data-target="20" style="font-size: 4rem; font-weight: 900; color: var(--blood-red); font-family: 'Hahmlet', serif;">20+</div>
+            <div style="color: var(--antique-gold); font-size: 1.2rem; margin-top: 1rem;">제조업체 연계</div>
           </div>
           <div>
-            <div class="text-4xl font-bold text-blue-600 mb-2">Free</div>
-            <div class="text-gray-600">No Cost Ever</div>
+            <div style="font-size: 4rem; font-weight: 900; color: var(--blood-red); font-family: 'Hahmlet', serif;">FREE</div>
+            <div style="color: var(--antique-gold); font-size: 1.2rem; margin-top: 1rem;">평생 무료</div>
           </div>
         </div>
       </div>
     </section>
     
     <!-- CTA Section -->
-    <section class="py-16 px-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white">
-      <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-4xl font-bold mb-6">Ready to Start Your Korean Journey?</h2>
-        <p class="text-xl mb-8 opacity-90">Join thousands of learners achieving their TOPIK goals</p>
-        <a href="/signup" class="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100">
-          Create Free Account
+    <section class="hero-section" style="min-height: 60vh; background: linear-gradient(135deg, rgba(139, 0, 0, 0.3) 0%, rgba(197, 160, 89, 0.2) 100%);">
+      <div class="hero-content">
+        <h2 class="hero-title" style="font-size: clamp(1.5rem, 6vw, 3rem);">
+          정복의 시작은 지금이다
+        </h2>
+        <p class="hero-subtitle" style="font-size: clamp(1rem, 2.5vw, 1.5rem);">
+          수천 명의 학습자와 함께 TOPIK 목표를 달성하라
+        </p>
+        <a href="/signup" class="seal-button ink-spread">
+          무료 계정 생성하기
         </a>
       </div>
     </section>
     
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12 px-4">
-      <div class="max-w-7xl mx-auto text-center">
-        <div class="text-2xl font-bold mb-4">
-          <i class="fas fa-graduation-cap mr-2"></i>
-          TOPIK Pro
+    <footer style="background: var(--kingdom-black); border-top: 2px solid var(--antique-gold); padding: 4rem 2rem;">
+      <div style="max-width: 1400px; margin: 0 auto; text-align: center;">
+        <div class="logo" style="font-size: 2rem; margin-bottom: 1.5rem;">
+          <i class="fas fa-scroll"></i>
+          <span>언어의 혈투</span>
         </div>
-        <p class="text-gray-400 mb-4">Free multilingual TOPIK learning platform</p>
-        <div class="text-gray-500 text-sm">
+        <p style="color: var(--hanji-white); opacity: 0.7; margin-bottom: 1rem;">
+          무료 다국어 TOPIK 학습 플랫폼
+        </p>
+        <div style="color: var(--antique-gold); font-size: 0.9rem;">
           © 2024 TOPIK Pro. All rights reserved.
         </div>
       </div>
@@ -465,381 +429,212 @@ app.get('/', (c) => {
 
 // Login page
 app.get('/login', (c) => {
-  const html = renderHTML(`
-    <div class="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-100">
-      <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-        <h2 class="text-3xl font-bold text-center mb-8" data-i18n="auth.login.title">Login to Your Account</h2>
-        <form id="loginForm">
-          <div class="mb-6">
-            <label class="block text-gray-700 mb-2" data-i18n="auth.login.email">Email</label>
-            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-          </div>
-          <div class="mb-6">
-            <label class="block text-gray-700 mb-2" data-i18n="auth.login.password">Password</label>
-            <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-          </div>
-          <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700" data-i18n="auth.login.submit">
-            Login
-          </button>
-        </form>
-        <p class="text-center mt-6 text-gray-600">
-          <span data-i18n="auth.login.noAccount">Don't have an account?</span>
-          <a href="/signup" class="text-blue-600 font-semibold ml-2" data-i18n="auth.login.signupLink">Sign up here</a>
-        </p>
+  const html = renderKingdomHTML(`
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="logo">
+          <a href="/" style="color: inherit; text-decoration: none;">
+            <i class="fas fa-scroll mr-2"></i>
+            <span>언어의 혈투</span>
+          </a>
+        </div>
       </div>
-    </div>
+    </nav>
+    
+    <!-- Login Form -->
+    <section class="hero-section">
+      <div class="hero-content" style="max-width: 500px;">
+        <h1 class="hero-title" style="font-size: 2.5rem; margin-bottom: 3rem;">
+          전사의 귀환
+        </h1>
+        
+        <form id="loginForm" style="background: rgba(13, 13, 13, 0.9); padding: 3rem; border: 2px solid var(--antique-gold); border-radius: 12px;">
+          <div style="margin-bottom: 2rem;">
+            <label style="display: block; color: var(--antique-gold); margin-bottom: 0.5rem; font-weight: 600;">이메일</label>
+            <input type="email" id="email" required 
+              style="width: 100%; padding: 1rem; background: rgba(242, 239, 233, 0.1); border: 1px solid var(--antique-gold); border-radius: 8px; color: var(--hanji-white); font-size: 1rem;">
+          </div>
+          
+          <div style="margin-bottom: 2rem;">
+            <label style="display: block; color: var(--antique-gold); margin-bottom: 0.5rem; font-weight: 600;">비밀번호</label>
+            <input type="password" id="password" required 
+              style="width: 100%; padding: 1rem; background: rgba(242, 239, 233, 0.1); border: 1px solid var(--antique-gold); border-radius: 8px; color: var(--hanji-white); font-size: 1rem;">
+          </div>
+          
+          <button type="submit" class="seal-button ink-spread" style="width: 100%; margin-bottom: 1.5rem;">
+            입장하기
+          </button>
+          
+          <div style="text-align: center; color: var(--hanji-white);">
+            <span style="opacity: 0.7;">아직 전사가 아니신가요?</span>
+            <a href="/signup" style="color: var(--blood-red); margin-left: 0.5rem; font-weight: 600;">등록하기</a>
+          </div>
+        </form>
+        
+        <div id="errorMessage" style="margin-top: 1rem; color: var(--blood-red); text-align: center; display: none;"></div>
+      </div>
+    </section>
+    
     <script>
       document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+        
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('errorMessage');
         
         try {
           const response = await axios.post('/api/auth/login', { email, password });
-          localStorage.setItem('topik_user', JSON.stringify(response.data.user));
-          window.location.href = '/dashboard';
+          
+          if (response.data.success) {
+            localStorage.setItem('topik_user', JSON.stringify(response.data.user));
+            window.location.href = '/dashboard';
+          }
         } catch (error) {
-          alert('Login failed: ' + (error.response?.data?.error || 'Unknown error'));
+          errorDiv.textContent = error.response?.data?.error || '로그인 실패';
+          errorDiv.style.display = 'block';
         }
       });
     </script>
-  `);
+  `, '로그인 - 언어의 혈투');
+  
   return c.html(html);
 });
 
 // Signup page
 app.get('/signup', (c) => {
-  const html = renderHTML(`
-    <div class="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-100">
-      <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-        <h2 class="text-3xl font-bold text-center mb-8" data-i18n="auth.signup.title">Create Your Account</h2>
-        <form id="signupForm">
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2" data-i18n="auth.signup.name">Full Name</label>
-            <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-          </div>
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2" data-i18n="auth.signup.email">Email</label>
-            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-          </div>
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2" data-i18n="auth.signup.password">Password</label>
-            <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-          </div>
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2" data-i18n="auth.signup.nativeLanguage">Native Language</label>
-            <select id="native_language" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-              <option value="en">English</option>
-              <option value="zh">Chinese</option>
-              <option value="hi">Hindi</option>
-              <option value="es">Spanish</option>
-              <option value="fr">French</option>
-              <option value="ar">Arabic</option>
-              <option value="bn">Bengali</option>
-              <option value="pt">Portuguese</option>
-              <option value="ru">Russian</option>
-              <option value="id">Indonesian</option>
-            </select>
-          </div>
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2" data-i18n="auth.signup.targetLevel">Target TOPIK Level</label>
-            <select id="target_topik_level" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-              <option value="1">Level 1</option>
-              <option value="2">Level 2</option>
-              <option value="3">Level 3</option>
-              <option value="4">Level 4</option>
-              <option value="5">Level 5</option>
-              <option value="6">Level 6</option>
-            </select>
-          </div>
-          <div class="mb-6">
-            <label class="block text-gray-700 mb-2" data-i18n="auth.signup.purpose">Learning Purpose</label>
-            <select id="purpose" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-              <option value="study">University Study</option>
-              <option value="work">Employment</option>
-              <option value="visa">Visa Requirements</option>
-              <option value="residence">Permanent Residence</option>
-            </select>
-          </div>
-          <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700" data-i18n="auth.signup.submit">
-            Sign Up
-          </button>
-        </form>
-        <p class="text-center mt-6 text-gray-600">
-          <span data-i18n="auth.signup.hasAccount">Already have an account?</span>
-          <a href="/login" class="text-blue-600 font-semibold ml-2" data-i18n="auth.signup.loginLink">Login here</a>
-        </p>
+  const html = renderKingdomHTML(`
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="logo">
+          <a href="/" style="color: inherit; text-decoration: none;">
+            <i class="fas fa-scroll mr-2"></i>
+            <span>언어의 혈투</span>
+          </a>
+        </div>
       </div>
-    </div>
+    </nav>
+    
+    <!-- Signup Form -->
+    <section class="hero-section" style="padding: 8rem 2rem 4rem;">
+      <div class="hero-content" style="max-width: 600px;">
+        <h1 class="hero-title" style="font-size: 2.5rem; margin-bottom: 3rem;">
+          전사의 등록
+        </h1>
+        
+        <form id="signupForm" style="background: rgba(13, 13, 13, 0.9); padding: 3rem; border: 2px solid var(--antique-gold); border-radius: 12px;">
+          <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; color: var(--antique-gold); margin-bottom: 0.5rem; font-weight: 600;">이름</label>
+            <input type="text" id="name" required 
+              style="width: 100%; padding: 1rem; background: rgba(242, 239, 233, 0.1); border: 1px solid var(--antique-gold); border-radius: 8px; color: var(--hanji-white); font-size: 1rem;">
+          </div>
+          
+          <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; color: var(--antique-gold); margin-bottom: 0.5rem; font-weight: 600;">이메일</label>
+            <input type="email" id="email" required 
+              style="width: 100%; padding: 1rem; background: rgba(242, 239, 233, 0.1); border: 1px solid var(--antique-gold); border-radius: 8px; color: var(--hanji-white); font-size: 1rem;">
+          </div>
+          
+          <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; color: var(--antique-gold); margin-bottom: 0.5rem; font-weight: 600;">비밀번호</label>
+            <input type="password" id="password" required 
+              style="width: 100%; padding: 1rem; background: rgba(242, 239, 233, 0.1); border: 1px solid var(--antique-gold); border-radius: 8px; color: var(--hanji-white); font-size: 1rem;">
+          </div>
+          
+          <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; color: var(--antique-gold); margin-bottom: 0.5rem; font-weight: 600;">모국어</label>
+            <select id="native_language" required 
+              style="width: 100%; padding: 1rem; background: rgba(242, 239, 233, 0.1); border: 1px solid var(--antique-gold); border-radius: 8px; color: var(--hanji-white); font-size: 1rem;">
+              <option value="English">English</option>
+              <option value="Chinese">中文</option>
+              <option value="Hindi">हिन्दी</option>
+              <option value="Spanish">Español</option>
+              <option value="French">Français</option>
+              <option value="Arabic">العربية</option>
+              <option value="Bengali">বাংলা</option>
+              <option value="Portuguese">Português</option>
+              <option value="Russian">Русский</option>
+              <option value="Indonesian">Bahasa Indonesia</option>
+            </select>
+          </div>
+          
+          <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; color: var(--antique-gold); margin-bottom: 0.5rem; font-weight: 600;">목표 TOPIK 급수</label>
+            <select id="target_level" required 
+              style="width: 100%; padding: 1rem; background: rgba(242, 239, 233, 0.1); border: 1px solid var(--antique-gold); border-radius: 8px; color: var(--hanji-white); font-size: 1rem;">
+              <option value="1">TOPIK I - 1급</option>
+              <option value="2">TOPIK I - 2급</option>
+              <option value="3">TOPIK II - 3급</option>
+              <option value="4">TOPIK II - 4급</option>
+              <option value="5">TOPIK II - 5급</option>
+              <option value="6">TOPIK II - 6급</option>
+            </select>
+          </div>
+          
+          <div style="margin-bottom: 2rem;">
+            <label style="display: block; color: var(--antique-gold); margin-bottom: 0.5rem; font-weight: 600;">학습 목적</label>
+            <select id="purpose" required 
+              style="width: 100%; padding: 1rem; background: rgba(242, 239, 233, 0.1); border: 1px solid var(--antique-gold); border-radius: 8px; color: var(--hanji-white); font-size: 1rem;">
+              <option value="study">유학</option>
+              <option value="work">취업</option>
+              <option value="visa">비자</option>
+              <option value="residence">영주권</option>
+            </select>
+          </div>
+          
+          <button type="submit" class="seal-button ink-spread" style="width: 100%; margin-bottom: 1.5rem;">
+            전사로 등록하기
+          </button>
+          
+          <div style="text-align: center; color: var(--hanji-white);">
+            <span style="opacity: 0.7;">이미 전사이신가요?</span>
+            <a href="/login" style="color: var(--blood-red); margin-left: 0.5rem; font-weight: 600;">로그인하기</a>
+          </div>
+        </form>
+        
+        <div id="message" style="margin-top: 1rem; text-align: center; display: none;"></div>
+      </div>
+    </section>
+    
     <script>
       document.getElementById('signupForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+        
         const formData = {
           name: document.getElementById('name').value,
           email: document.getElementById('email').value,
           password: document.getElementById('password').value,
           native_language: document.getElementById('native_language').value,
-          target_topik_level: document.getElementById('target_topik_level').value,
+          target_topik_level: parseInt(document.getElementById('target_level').value),
           purpose: document.getElementById('purpose').value
         };
         
+        const messageDiv = document.getElementById('message');
+        
         try {
           const response = await axios.post('/api/auth/signup', formData);
-          alert('Account created successfully!');
-          window.location.href = '/login';
+          
+          if (response.data.success) {
+            messageDiv.style.color = 'var(--antique-gold)';
+            messageDiv.textContent = '등록 성공! 로그인 페이지로 이동합니다...';
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+              window.location.href = '/login';
+            }, 2000);
+          }
         } catch (error) {
-          alert('Signup failed: ' + (error.response?.data?.error || 'Unknown error'));
+          messageDiv.style.color = 'var(--blood-red)';
+          messageDiv.textContent = error.response?.data?.error || '등록 실패';
+          messageDiv.style.display = 'block';
         }
       });
     </script>
-  `);
+  `, '회원가입 - 언어의 혈투');
+  
   return c.html(html);
 });
-
-// Dashboard page
-app.get('/dashboard', (c) => {
-  const html = renderHTML(`
-    <div class="min-h-screen bg-gray-100">
-      <!-- Navigation -->
-      <nav class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-4">
-          <div class="flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-600">
-              <i class="fas fa-graduation-cap mr-2"></i>
-              TOPIK Pro
-            </div>
-            <div class="flex items-center space-x-6">
-              <span id="userName" class="text-gray-700"></span>
-              <button onclick="logout()" class="text-red-600 hover:text-red-700" data-i18n="nav.logout">Logout</button>
-            </div>
-          </div>
-        </div>
-      </nav>
-      
-      <!-- Dashboard Content -->
-      <div class="max-w-7xl mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-8" data-i18n="dashboard.title">My Dashboard</h1>
-        
-        <!-- Stats Cards -->
-        <div class="grid md:grid-cols-4 gap-6 mb-8">
-          <div class="bg-white p-6 rounded-xl shadow-lg">
-            <div class="text-gray-600 mb-2" data-i18n="dashboard.currentLevel">Current Level</div>
-            <div class="text-3xl font-bold text-blue-600">Level <span id="currentLevel">-</span></div>
-          </div>
-          <div class="bg-white p-6 rounded-xl shadow-lg">
-            <div class="text-gray-600 mb-2" data-i18n="dashboard.targetLevel">Target Level</div>
-            <div class="text-3xl font-bold text-green-600">Level <span id="targetLevel">-</span></div>
-          </div>
-          <div class="bg-white p-6 rounded-xl shadow-lg">
-            <div class="text-gray-600 mb-2" data-i18n="dashboard.progress">Progress</div>
-            <div class="text-3xl font-bold text-purple-600"><span id="progress">0</span>%</div>
-          </div>
-          <div class="bg-white p-6 rounded-xl shadow-lg">
-            <div class="text-gray-600 mb-2">Mock Exams</div>
-            <div class="text-3xl font-bold text-orange-600"><span id="examCount">0</span></div>
-          </div>
-        </div>
-        
-        <!-- Action Cards -->
-        <div class="grid md:grid-cols-3 gap-6">
-          <a href="/lessons" class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl block">
-            <div class="text-5xl mb-4">📚</div>
-            <h3 class="text-2xl font-bold mb-3" data-i18n="dashboard.startLearning">Start Learning</h3>
-            <p class="text-gray-600">Access grammar, vocabulary, and practice materials</p>
-          </a>
-          
-          <a href="/mock-exam" class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl block">
-            <div class="text-5xl mb-4">✍️</div>
-            <h3 class="text-2xl font-bold mb-3" data-i18n="dashboard.takeMockExam">Take Mock Exam</h3>
-            <p class="text-gray-600">Test your knowledge with practice exams</p>
-          </a>
-          
-          <a href="/universities" class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl block">
-            <div class="text-5xl mb-4">🎓</div>
-            <h3 class="text-2xl font-bold mb-3">Explore Universities</h3>
-            <p class="text-gray-600">Find partner universities in Gyeongsan</p>
-          </a>
-        </div>
-      </div>
-    </div>
-    
-    <script>
-      const user = JSON.parse(localStorage.getItem('topik_user') || '{}');
-      if (!user.id) {
-        window.location.href = '/login';
-      }
-      
-      document.getElementById('userName').textContent = user.name;
-      document.getElementById('targetLevel').textContent = user.target_topik_level || 1;
-      
-      // Load user progress
-      async function loadDashboard() {
-        try {
-          const [progressRes, examRes] = await Promise.all([
-            axios.get('/api/progress/' + user.id),
-            axios.get('/api/mock-exams/' + user.id)
-          ]);
-          
-          const progress = progressRes.data.progress || [];
-          const exams = examRes.data.results || [];
-          
-          document.getElementById('examCount').textContent = exams.length;
-          
-          if (exams.length > 0) {
-            document.getElementById('currentLevel').textContent = exams[0].predicted_level;
-          }
-          
-          const completedLessons = progress.filter(p => p.status === 'completed').length;
-          const totalLessons = progress.length || 1;
-          const progressPercent = Math.round((completedLessons / totalLessons) * 100);
-          document.getElementById('progress').textContent = progressPercent;
-        } catch (error) {
-          console.error('Failed to load dashboard data:', error);
-        }
-      }
-      
-      function logout() {
-        localStorage.removeItem('topik_user');
-        window.location.href = '/';
-      }
-      
-      loadDashboard();
-    </script>
-  `);
-  return c.html(html);
-});
-
-// Universities page
-app.get('/universities', (c) => {
-  const html = renderHTML(`
-    <div class="min-h-screen bg-gray-100">
-      <nav class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-4">
-          <div class="flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-600">
-              <i class="fas fa-graduation-cap mr-2"></i>
-              TOPIK Pro
-            </div>
-            <a href="/dashboard" class="text-gray-600 hover:text-blue-600">← Back to Dashboard</a>
-          </div>
-        </div>
-      </nav>
-      
-      <div class="max-w-7xl mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-8" data-i18n="nav.universities">Partner Universities</h1>
-        <p class="text-xl text-gray-600 mb-8">Connect with universities in Gyeongsan, Gyeongbuk</p>
-        
-        <div id="universitiesList" class="grid md:grid-cols-2 gap-6">
-          <div class="text-center py-12">Loading...</div>
-        </div>
-      </div>
-    </div>
-    
-    <script>
-      async function loadUniversities() {
-        try {
-          const response = await axios.get('/api/universities');
-          const universities = response.data.universities || [];
-          
-          const html = universities.map(uni => \`
-            <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl">
-              <h3 class="text-2xl font-bold mb-2">\${uni.name}</h3>
-              <p class="text-gray-600 mb-4">\${uni.name_en || ''}</p>
-              <div class="space-y-2 text-sm">
-                <div><i class="fas fa-map-marker-alt mr-2 text-blue-600"></i> \${uni.location}</div>
-                <div><i class="fas fa-certificate mr-2 text-blue-600"></i> Min TOPIK: Level \${uni.min_topik_level}</div>
-                \${uni.scholarship_available ? '<div><i class="fas fa-award mr-2 text-green-600"></i> Scholarship Available</div>' : ''}
-                \${uni.website ? \`<div><a href="\${uni.website}" target="_blank" class="text-blue-600 hover:underline"><i class="fas fa-link mr-2"></i> Visit Website</a></div>\` : ''}
-              </div>
-            </div>
-          \`).join('');
-          
-          document.getElementById('universitiesList').innerHTML = html || '<p class="text-center text-gray-600">No universities found</p>';
-        } catch (error) {
-          console.error('Failed to load universities:', error);
-          document.getElementById('universitiesList').innerHTML = '<p class="text-center text-red-600">Failed to load universities</p>';
-        }
-      }
-      
-      loadUniversities();
-    </script>
-  `);
-  return c.html(html);
-});
-
-// Companies page
-app.get('/companies', (c) => {
-  const html = renderHTML(`
-    <div class="min-h-screen bg-gray-100">
-      <nav class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-4">
-          <div class="flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-600">
-              <i class="fas fa-graduation-cap mr-2"></i>
-              TOPIK Pro
-            </div>
-            <a href="/dashboard" class="text-gray-600 hover:text-blue-600">← Back to Dashboard</a>
-          </div>
-        </div>
-      </nav>
-      
-      <div class="max-w-7xl mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-8" data-i18n="nav.companies">Partner Companies</h1>
-        <p class="text-xl text-gray-600 mb-8">Job opportunities in manufacturing sector</p>
-        
-        <div id="companiesList" class="grid md:grid-cols-2 gap-6">
-          <div class="text-center py-12">Loading...</div>
-        </div>
-      </div>
-    </div>
-    
-    <script>
-      async function loadCompanies() {
-        try {
-          const response = await axios.get('/api/companies');
-          const companies = response.data.companies || [];
-          
-          const html = companies.map(company => \`
-            <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl">
-              <h3 class="text-2xl font-bold mb-2">\${company.name}</h3>
-              <div class="space-y-2 text-sm mb-4">
-                <div><i class="fas fa-industry mr-2 text-blue-600"></i> \${company.industry}</div>
-                <div><i class="fas fa-map-marker-alt mr-2 text-blue-600"></i> \${company.location}</div>
-                <div><i class="fas fa-certificate mr-2 text-blue-600"></i> Min TOPIK: Level \${company.min_topik_level}</div>
-                \${company.visa_support ? '<div><i class="fas fa-passport mr-2 text-green-600"></i> Visa Support Available</div>' : ''}
-              </div>
-              \${company.job_positions ? \`
-                <div class="border-t pt-4">
-                  <strong>Available Positions:</strong>
-                  <div class="mt-2 flex flex-wrap gap-2">
-                    \${JSON.parse(company.job_positions).map(pos => \`<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">\${pos}</span>\`).join('')}
-                  </div>
-                </div>
-              \` : ''}
-            </div>
-          \`).join('');
-          
-          document.getElementById('companiesList').innerHTML = html || '<p class="text-center text-gray-600">No companies found</p>';
-        } catch (error) {
-          console.error('Failed to load companies:', error);
-          document.getElementById('companiesList').innerHTML = '<p class="text-center text-red-600">Failed to load companies</p>';
-        }
-      }
-      
-      loadCompanies();
-    </script>
-  `);
-  return c.html(html);
-});
-
-// Helper function to calculate TOPIK level
-function calculateTopikLevel(totalScore: number): number {
-  if (totalScore >= 230) return 6;
-  if (totalScore >= 190) return 5;
-  if (totalScore >= 150) return 4;
-  if (totalScore >= 120) return 3;
-  if (totalScore >= 80) return 2;
-  return 1;
-}
 
 export default app;

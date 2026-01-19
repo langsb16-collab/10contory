@@ -1,0 +1,509 @@
+/* 킹덤 스타일 + 현대적 3D 훈민정음 테마 */
+
+/* ==================== 컬러 팔레트 ==================== */
+:root {
+  --kingdom-black: #0D0D0D;
+  --blood-red: #8B0000;
+  --antique-gold: #C5A059;
+  --hanji-white: #F2EFE9;
+  --modern-blue: #1E40AF;
+  --glow-cyan: #06B6D4;
+}
+
+/* ==================== 기본 스타일 ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--kingdom-black);
+  color: var(--hanji-white);
+  overflow-x: hidden;
+}
+
+/* ==================== 한지 텍스처 배경 ==================== */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(245, 245, 245, 0.02) 2px,
+      rgba(245, 245, 245, 0.02) 4px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(245, 245, 245, 0.02) 2px,
+      rgba(245, 245, 245, 0.02) 4px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==================== 3D 훈민정음 컨테이너 ==================== */
+.hunminjeongeum-3d {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20vw;
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--glow-cyan);
+  text-stroke: 2px var(--glow-cyan);
+  opacity: 0.1;
+  z-index: 1;
+  pointer-events: none;
+  animation: float3D 8s ease-in-out infinite;
+  font-family: 'Hahmlet', serif;
+  text-shadow: 
+    0 0 20px rgba(6, 182, 212, 0.5),
+    0 0 40px rgba(6, 182, 212, 0.3),
+    0 0 60px rgba(6, 182, 212, 0.2);
+}
+
+@keyframes float3D {
+  0%, 100% {
+    transform: translate(-50%, -50%) rotateY(0deg) scale(1);
+  }
+  25% {
+    transform: translate(-50%, -50%) rotateY(10deg) scale(1.05);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotateY(0deg) scale(1.1);
+  }
+  75% {
+    transform: translate(-50%, -50%) rotateY(-10deg) scale(1.05);
+  }
+}
+
+/* ==================== 먹물 번짐 효과 ==================== */
+.ink-spread {
+  position: relative;
+  overflow: hidden;
+}
+
+.ink-spread::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--blood-red) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ink-spread:hover::after {
+  width: 300px;
+  height: 300px;
+  opacity: 0.3;
+}
+
+/* ==================== 네비게이션 ==================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(13, 13, 13, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  border-bottom: 1px solid var(--antique-gold);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'Hahmlet', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--antique-gold);
+  text-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logo:hover {
+  color: var(--blood-red);
+  text-shadow: 0 0 20px rgba(139, 0, 0, 0.8);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--hanji-white);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--blood-red);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--antique-gold);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* ==================== 히어로 섹션 ==================== */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(135deg, rgba(13, 13, 13, 0.8) 0%, rgba(139, 0, 0, 0.3) 100%),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%230D0D0D" width="100" height="100"/><g fill-opacity="0.05"><circle fill="%23C5A059" cx="50" cy="50" r="40"/></g></svg>');
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.hero-content {
+  max-width: 1200px;
+  z-index: 100;
+}
+
+.hero-title {
+  font-family: 'Hahmlet', serif;
+  font-size: clamp(2rem, 8vw, 5rem);
+  font-weight: 900;
+  color: var(--blood-red);
+  text-shadow: 
+    0 0 20px rgba(139, 0, 0, 0.8),
+    0 0 40px rgba(139, 0, 0, 0.6),
+    2px 2px 10px rgba(0, 0, 0, 0.9);
+  margin-bottom: 1.5rem;
+  animation: titleReveal 1.5s ease-out;
+  line-height: 1.2;
+}
+
+@keyframes titleReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-subtitle {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1rem, 3vw, 1.8rem);
+  color: var(--antique-gold);
+  margin-bottom: 3rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  animation: subtitleFade 2s ease-out 0.5s both;
+}
+
+@keyframes subtitleFade {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== 버튼 (붉은 인장 스타일) ==================== */
+.seal-button {
+  position: relative;
+  display: inline-block;
+  padding: 1.2rem 3rem;
+  background: var(--blood-red);
+  color: var(--hanji-white);
+  font-size: 1.2rem;
+  font-weight: 700;
+  border: 3px solid var(--antique-gold);
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 5px 20px rgba(139, 0, 0, 0.5),
+    inset 0 0 20px rgba(197, 160, 89, 0.2);
+  animation: buttonPulse 3s ease-in-out infinite;
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow: 
+      0 5px 20px rgba(139, 0, 0, 0.5),
+      inset 0 0 20px rgba(197, 160, 89, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 8px 30px rgba(139, 0, 0, 0.8),
+      inset 0 0 30px rgba(197, 160, 89, 0.4);
+  }
+}
+
+.seal-button:hover {
+  background: var(--antique-gold);
+  color: var(--kingdom-black);
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 
+    0 10px 40px rgba(197, 160, 89, 0.8),
+    inset 0 0 30px rgba(139, 0, 0, 0.3);
+}
+
+/* ==================== 피처 섹션 ==================== */
+.features-section {
+  padding: 8rem 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.features-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-family: 'Hahmlet', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  text-align: center;
+  color: var(--antique-gold);
+  margin-bottom: 4rem;
+  text-shadow: 0 0 20px rgba(197, 160, 89, 0.5);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+}
+
+.feature-card {
+  background: rgba(13, 13, 13, 0.8);
+  border: 2px solid var(--antique-gold);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, var(--blood-red) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--blood-red);
+  box-shadow: 0 20px 60px rgba(139, 0, 0, 0.5);
+}
+
+.feature-card:hover::before {
+  opacity: 0.1;
+}
+
+.feature-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.5));
+}
+
+.feature-title {
+  font-family: 'Hahmlet', serif;
+  font-size: 1.8rem;
+  color: var(--antique-gold);
+  margin-bottom: 1rem;
+}
+
+.feature-desc {
+  color: var(--hanji-white);
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* ==================== 언어 선택기 ==================== */
+.lang-selector {
+  position: fixed;
+  top: 5rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+.lang-select {
+  background: rgba(13, 13, 13, 0.95);
+  border: 2px solid var(--antique-gold);
+  color: var(--hanji-white);
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.lang-select:hover {
+  border-color: var(--blood-red);
+  box-shadow: 0 5px 20px rgba(139, 0, 0, 0.5);
+}
+
+/* ==================== 반응형 디자인 (모바일 퍼스트) ==================== */
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 1rem;
+  }
+  
+  .nav-links {
+    display: none;
+  }
+  
+  .hero-section {
+    padding: 6rem 1rem;
+  }
+  
+  .hunminjeongeum-3d {
+    font-size: 30vw;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .lang-selector {
+    top: 4rem;
+    right: 1rem;
+  }
+}
+
+/* ==================== 스크롤 바 커스터마이징 ==================== */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--kingdom-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--blood-red);
+  border-radius: 6px;
+  border: 2px solid var(--kingdom-black);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--antique-gold);
+}
+
+/* ==================== 로딩 애니메이션 (먹물 번짐) ==================== */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--kingdom-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ink-drops {
+  display: flex;
+  gap: 1rem;
+}
+
+.ink-drop {
+  width: 20px;
+  height: 20px;
+  background: var(--blood-red);
+  border-radius: 50%;
+  animation: inkDrop 1.5s ease-in-out infinite;
+}
+
+.ink-drop:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.ink-drop:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes inkDrop {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5) translateY(-20px);
+    opacity: 0.5;
+  }
+}
