@@ -174,10 +174,10 @@ app.get('/', (c) => {
     <section class="hero-section">
       <div class="hero-content">
         <h1 class="hero-title" data-i18n="home.hero.title">
-          Learn <span class="highlight">Korean</span>. Heal in <span class="highlight">Korea</span>.
+          언어는 생존이다.<br>가장 <span class="highlight">in</span> 치열하게.
         </h1>
         <p class="hero-subtitle" data-i18n="home.hero.subtitle">
-          Language, Health, and Care — All in One Journey
+          — 조선의 언어를 넘어, 세계의 지혜를 탐하라
         </p>
         <div class="hero-cta">
           <a href="/dashboard" class="btn btn-primary" data-i18n="home.hero.cta">
